@@ -45,7 +45,6 @@
   .app { max-width:860px; margin:0 auto; padding:2rem 1.25rem; }
   .header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.75rem; gap:12px; flex-wrap:wrap; }
   .header h1 { font-size:22px; font-weight:500; }
-  .header > div > p { font-size:13px; color:var(--text2); margin-top:3px; }
   .header-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
   .user-pill { font-size:12px; color:var(--text2); background:var(--surface2); border:0.5px solid var(--border); border-radius:20px; padding:5px 10px; display:flex; align-items:center; gap:5px; }
 
@@ -67,12 +66,12 @@
   .ftab:hover:not(.active) { background:var(--surface2); }
 
   .user-list { display:flex; flex-direction:column; gap:8px; }
-  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; text-decoration: none; color: inherit; position: relative; }
+  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; position: relative; }
   .user-card:hover { border-color:var(--accent); background: var(--bg); }
   .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:500; font-size:14px; flex-shrink:0; }
   .user-info { flex:1; min-width:0; }
   .user-name { font-size:14px; font-weight:500; display: flex; align-items: center; gap: 6px; }
-  .user-name .ti-external-link { font-size: 14px; color: var(--accent); opacity: 0.6; }
+  .ti-external-link { font-size: 14px; color: var(--accent); opacity: 0.6; }
   .user-meta { font-size:12px; color:var(--text2); margin-top:4px; display:flex; gap:14px; flex-wrap:wrap; }
   .user-meta span { display:flex; align-items:center; gap:4px; }
   .badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:500; white-space:nowrap; flex-shrink:0; }
@@ -100,6 +99,13 @@
 
   .status-list-ui { display:flex; flex-direction:column; gap:6px; margin-bottom:1rem; max-height:220px; overflow-y:auto; }
   .status-item-ui { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:var(--radius); border:0.5px solid var(--border); }
+  
+  .add-status-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .add-status-row input { flex: 1; padding: 8px; border-radius: var(--radius); border: 0.5px solid var(--border2); outline: none; font-size: 13px; }
+  .color-opts { display:flex; gap:6px; }
+  .color-opt { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition: all 0.2s; }
+  .color-opt.sel { border-color: var(--text); transform: scale(1.15); }
+
   .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:9px 18px; border-radius:var(--radius); font-size:13px; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
   .toast.show { opacity:1; }
 </style>
@@ -184,7 +190,7 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { initializeApp }    from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
@@ -201,14 +207,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ── State ──
 let users = [], statuses = [];
 let activeFilter = 'all', editingId = null;
 let currentPage = 1;
 const PAGE_SIZE = 100;
 
 const COLORS = [
-  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' }, // 红 (用于拒绝)
+  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' }, // 红 (拒绝)
   { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' }, // 蓝
   { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' }, // 绿
   { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' }, // 橙
@@ -229,7 +234,6 @@ onAuthStateChanged(auth, user => {
 });
 
 async function initApp() {
-  // 确保“拒绝”分类存在
   const sSnap = await getDocs(collection(db, 'statuses'));
   const currentLabels = sSnap.docs.map(d => d.data().label);
   if (!currentLabels.includes('拒绝')) {
@@ -248,7 +252,6 @@ async function initApp() {
   });
 }
 
-// ── Render ──
 function renderAll() {
   document.getElementById('total-label').textContent = `共 ${users.length} 条记录`;
   const statHTML = [{label:'全部', val:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, val:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
@@ -259,14 +262,12 @@ function renderAll() {
   renderList();
 }
 
-window.resetPageAndRender = () => { currentPage = 1; renderList(); };
-
 window.renderList = () => {
   const q = document.getElementById('search-input').value.toLowerCase();
   const filtered = users.filter(u => {
-    const matchSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
-    const matchFilter = activeFilter === 'all' || u.statusId === activeFilter;
-    return matchSearch && matchFilter;
+    const mSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
+    const mFilter = activeFilter === 'all' || u.statusId === activeFilter;
+    return mSearch && mFilter;
   });
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
@@ -280,11 +281,10 @@ window.renderList = () => {
   if(!paged.length) { listEl.innerHTML='<div class="empty">无匹配结果</div>'; return; }
 
   listEl.innerHTML = paged.map((u, i) => {
-    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color: {bg:'#eee', tx:'#666'}};
-    // 关键：点击定位到详情页面的逻辑
+    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color: {bg:'#eee', tx:'#666', dot:'#888'}};
     const mapUrl = u.placeId 
       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + u.addr)}`;
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
 
     return `
     <div class="user-card" onclick="if(!event.target.closest('button')) window.open('${mapUrl}','_blank')">
@@ -305,10 +305,10 @@ window.renderList = () => {
   }).join('');
 };
 
+window.resetPageAndRender = () => { currentPage = 1; renderList(); };
 window.changePage = d => { currentPage += d; renderList(); window.scrollTo(0,0); };
-
-// ── CRUD ──
 window._sf = id => { activeFilter=id; currentPage=1; renderAll(); };
+
 window._eu = id => {
   const u = users.find(x=>x.id===id); editingId=id;
   document.getElementById('modal-title').textContent='编辑用户';
@@ -318,7 +318,9 @@ window._eu = id => {
   document.getElementById('f-wechat').value=u.wechat||'';
   refreshStatusSelect(u.statusId); openModal('add-modal');
 };
+
 window._du = async id => { if(confirm('确认删除？')) await deleteDoc(doc(db,'users',id)); };
+
 window.saveUser = async () => {
   const data = {
     name: document.getElementById('f-name').value,
@@ -332,32 +334,54 @@ window.saveUser = async () => {
   closeModal('add-modal'); toast('已保存');
 };
 
-// ── Status Logic ──
 window.openStatusModal = () => { renderStatusListUI(); renderColorOpts(); openModal('status-modal'); };
+
 window.addStatus = async () => {
-  const label = document.getElementById('new-status-name').value;
-  if(label) await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
-  document.getElementById('new-status-name').value='';
+  const input = document.getElementById('new-status-name');
+  const label = input.value.trim();
+  if(!label) return;
+  await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
+  input.value='';
 };
-window._ds = async id => { if(!users.some(u=>u.statusId===id)) await deleteDoc(doc(db,'statuses',id)); else alert('该分类下有用户'); };
-window._sc = i => { selectedColor=COLORS[i]; renderColorOpts(); };
+
+window._ds = async id => { 
+  if(users.some(u=>u.statusId===id)) { alert('该分类下有用户'); return; }
+  await deleteDoc(doc(db,'statuses',id)); 
+};
+
+// 修复点：这里不仅更新 selectedColor，还要重新渲染颜色选项
+window._sc = i => { 
+  selectedColor=COLORS[i]; 
+  renderColorOpts(); 
+};
 
 function renderStatusListUI() {
-  document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`<div class="status-item-ui"><span>${s.label}</span> <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button></div>`).join('');
+  document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`
+    <div class="status-item-ui">
+      <span>${s.label}</span> 
+      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button>
+    </div>`).join('');
 }
+
 function renderColorOpts() {
-  document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`<div class="color-opt ${c===selectedColor?'sel':''}" style="background:${c.dot}" onclick="window._sc(${i})"></div>`).join('');
+  document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`
+    <div class="color-opt ${c===selectedColor?'sel':''}" 
+         style="background:${c.dot}" 
+         onclick="window._sc(${i})">
+    </div>`).join('');
 }
+
 function refreshStatusSelect(selId) {
   document.getElementById('f-status').innerHTML = statuses.map(s=>`<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
 }
+
 window.openAddModal = () => { editingId=null; refreshStatusSelect(); openModal('add-modal'); };
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 window.bgClose = (e,id) => { if(e.target.id===id) closeModal(id); };
 function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 window.togglePw = () => { const i=document.getElementById('login-pw'); i.type=i.type==='password'?'text':'password'; };
-window.doLogin = async () => { try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', document.getElementById('login-pw').value); } catch(e) { alert('登录失败'); } };
+window.doLogin = async () => { try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', document.getElementById('login-pw').value); } catch(e) { alert('密码错误'); } };
 const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'], AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
 </script>
 </body>
