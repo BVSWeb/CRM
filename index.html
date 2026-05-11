@@ -307,13 +307,44 @@ function saveTemplates() {
 }
 window.saveTemplates = saveTemplates;
 
-function buildWaUrl(phone, name, tmplIndex) {
-  const raw = (phone || '').replace(/\s/g, '');
-  // Ensure Italian number has country code
-  let clean = raw.replace(/\D/g,'');
-  if (clean.startsWith('0') && !clean.startsWith('00')) clean = '39' + clean.slice(0);
-  if (!clean.startsWith('39') && clean.length <= 10) clean = '39' + clean;
+function normalizeItalianPhone(raw) {
+  if (!raw) return null;
 
+  // Strip everything except digits and leading +
+  let s = raw.trim();
+
+  // Handle +39... → remove + sign, keep digits
+  s = s.replace(/^\+/, '');
+
+  // Keep only digits now
+  let d = s.replace(/\D/g, '');
+
+  if (!d) return null;
+
+  // Already has country code 39
+  if (d.startsWith('39') && d.length >= 11) return d;
+
+  // International prefix 0039
+  if (d.startsWith('0039')) return d.slice(2); // → 39...
+
+  // Italian landline starts with 0 (e.g. 02..., 06..., 011...)
+  // Italian mobile starts with 3 (e.g. 333, 347, 380...)
+  // Strip leading 0 only if it's a local trunk prefix (not already 39)
+  if (d.startsWith('0') && !d.startsWith('039')) {
+    // local number like 02123456 → 3902123456
+    return '39' + d;
+  }
+
+  // Mobile numbers like 3331234567 (10 digits starting with 3)
+  if (d.startsWith('3') && d.length === 10) return '39' + d;
+
+  // Anything else: just prepend 39
+  return '39' + d;
+}
+
+function buildWaUrl(phone, name, tmplIndex) {
+  const clean = normalizeItalianPhone(phone);
+  if (!clean) return '#';
   const msg = templates[tmplIndex].replace(/\{name\}/g, name || '');
   return `https://wa.me/${clean}?text=${encodeURIComponent(msg)}`;
 }
