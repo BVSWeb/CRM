@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>用户管理系统</title>
+<title>用户管理系统 Pro</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -67,8 +67,8 @@
   .ftab:hover:not(.active) { background:var(--surface2); }
 
   .user-list { display:flex; flex-direction:column; gap:8px; }
-  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; }
-  .user-card:hover { border-color:var(--border2); }
+  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
+  .user-card:hover { border-color:var(--border2); background: var(--bg); }
   .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:500; font-size:14px; flex-shrink:0; }
   .user-info { flex:1; min-width:0; }
   .user-name { font-size:14px; font-weight:500; }
@@ -80,6 +80,10 @@
   .icon-btn:hover { background:var(--surface2); color:var(--text); }
   .icon-btn.danger:hover { color:#A32D2D; }
 
+  /* ── Pagination ── */
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 2rem; padding: 1rem; border-top: 0.5px solid var(--border); }
+  .page-info { font-size: 13px; color: var(--text2); }
+
   .empty { text-align:center; padding:4rem 1rem; color:var(--text2); font-size:14px; background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); }
   .empty i { font-size:36px; display:block; margin-bottom:10px; color:var(--text3); }
   .loading { text-align:center; padding:3rem; color:var(--text2); font-size:14px; }
@@ -88,8 +92,9 @@
 
   .btn { padding:7px 14px; font-size:13px; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s; border:0.5px solid var(--border2); background:var(--surface); color:var(--text2); }
   .btn:hover { background:var(--surface2); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
-  .btn-primary:hover { opacity:0.85; }
+  .btn-primary:hover:not(:disabled) { opacity:0.85; }
 
   .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:200; padding:1rem; }
   .overlay.open { display:flex; }
@@ -117,7 +122,6 @@
 </head>
 <body>
 
-<!-- ── Login ── -->
 <div id="login-page">
   <div class="login-card">
     <div class="login-logo"><i class="ti ti-users"></i></div>
@@ -140,7 +144,6 @@
   </div>
 </div>
 
-<!-- ── App ── -->
 <div id="app-page">
   <div class="app">
     <div class="header">
@@ -159,17 +162,22 @@
     <div class="controls">
       <div class="search-wrap">
         <i class="ti ti-search"></i>
-        <input type="text" id="search-input" placeholder="搜索用户名、电话、微信…" oninput="renderList()">
+        <input type="text" id="search-input" placeholder="搜索用户名、电话、微信…" oninput="resetPageAndRender()">
       </div>
       <div class="filter-tabs" id="filter-tabs"></div>
     </div>
     <div class="user-list" id="user-list">
       <div class="loading"><div class="spinner"></div>正在连接数据库…</div>
     </div>
+
+    <div class="pagination" id="pagination-ctrl">
+      <button class="btn" id="prev-page" onclick="changePage(-1)"><i class="ti ti-chevron-left"></i> 上一页</button>
+      <span class="page-info" id="page-info">第 1 页</span>
+      <button class="btn" id="next-page" onclick="changePage(1)">下一页 <i class="ti ti-chevron-right"></i></button>
+    </div>
   </div>
 </div>
 
-<!-- Add/Edit Modal -->
 <div class="overlay" id="add-modal" onclick="bgClose(event,'add-modal')">
   <div class="modal">
     <h3 id="modal-title">添加用户</h3>
@@ -185,7 +193,6 @@
   </div>
 </div>
 
-<!-- Status Modal -->
 <div class="overlay" id="status-modal" onclick="bgClose(event,'status-modal')">
   <div class="modal" style="max-width:380px;">
     <h3>管理分类</h3>
@@ -211,10 +218,7 @@ import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc,
          onSnapshot, query, orderBy, serverTimestamp, getDocs }
                              from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-// ╔══════════════════════════════════╗
-// ║  在此修改登录邮件（密码在 Firebase Auth 里设置）║
 const LOGIN_EMAIL = "admin@bvsweb.com";
-// ╚══════════════════════════════════╝
 
 const firebaseConfig = {
   apiKey: "AIzaSyDIauAyJWlfqhDs8fIAjr-I6vtCG3EKCxc",
@@ -230,63 +234,34 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// Show email on login screen
 document.getElementById('show-email').textContent = LOGIN_EMAIL;
 
-// ── Auth actions ─────────────────────────────────────────
+// ── Auth ──
 window.doLogin = async () => {
-  const pw  = document.getElementById('login-pw').value;
+  const pw = document.getElementById('login-pw').value;
   const btn = document.getElementById('login-btn');
   const err = document.getElementById('login-err');
   if (!pw) { err.textContent = '请输入密码'; return; }
-  err.textContent = '';
-  btn.disabled = true;
+  err.textContent = ''; btn.disabled = true;
   btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;margin:0;border-width:2px;display:inline-block"></div> 登录中…';
-  try {
-    await signInWithEmailAndPassword(auth, LOGIN_EMAIL, pw);
-  } catch(e) {
-    const code = e.code;
-    err.textContent =
-      code === 'auth/wrong-password'      || code === 'auth/invalid-credential' ? '密码错误，请重试' :
-      code === 'auth/too-many-requests'   ? '尝试次数过多，请稍后再试' :
-      code === 'auth/user-not-found'      ? '该账号不存在' :
-      '登录失败：' + e.message;
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-login"></i> 登录';
+  try { await signInWithEmailAndPassword(auth, LOGIN_EMAIL, pw); } catch(e) {
+    err.textContent = '密码错误或账号受限'; btn.disabled = false; btn.innerHTML = '<i class="ti ti-login"></i> 登录';
   }
 };
-
 window.doLogout = async () => { await signOut(auth); };
-
 window.togglePw = () => {
-  const inp  = document.getElementById('login-pw');
-  const icon = document.getElementById('pw-eye');
-  const show = inp.type === 'password';
-  inp.type       = show ? 'text' : 'password';
+  const inp = document.getElementById('login-pw'); const icon = document.getElementById('pw-eye');
+  const show = inp.type === 'password'; inp.type = show ? 'text' : 'password';
   icon.className = show ? 'ti ti-eye-off' : 'ti ti-eye';
 };
 
-// ── Auth state ───────────────────────────────────────────
+// ── State ──
 let unsubStatuses = null, unsubUsers = null;
+let users = [], statuses = [];
+let activeFilter = 'all', editingId = null;
+const PAGE_SIZE = 100;
+let currentPage = 1;
 
-onAuthStateChanged(auth, user => {
-  if (user) {
-    document.getElementById('login-page').style.display  = 'none';
-    document.getElementById('app-page').style.display    = 'block';
-    document.getElementById('login-pw').value            = '';
-    document.getElementById('authed-email').textContent  = user.email;
-    startListeners();
-  } else {
-    document.getElementById('login-page').style.display  = 'flex';
-    document.getElementById('app-page').style.display    = 'none';
-    document.getElementById('login-btn').disabled        = false;
-    document.getElementById('login-btn').innerHTML       = '<i class="ti ti-login"></i> 登录';
-    if (unsubStatuses) { unsubStatuses(); unsubStatuses = null; }
-    if (unsubUsers)    { unsubUsers();    unsubUsers    = null; }
-  }
-});
-
-// ── Firestore ────────────────────────────────────────────
 const COLORS = [
   { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' },
   { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' },
@@ -295,19 +270,31 @@ const COLORS = [
   { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' },
   { bg:'#EAF3DE', tx:'#27500A', dot:'#639922' },
 ];
+let selectedColor = COLORS[0];
 const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'];
 const AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
 
-let users = [], statuses = [];
-let activeFilter = 'all', editingId = null, selectedColor = COLORS[0];
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('app-page').style.display = 'block';
+    document.getElementById('authed-email').textContent = user.email;
+    startListeners();
+  } else {
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('app-page').style.display = 'none';
+    if (unsubStatuses) unsubStatuses(); if (unsubUsers) unsubUsers();
+  }
+});
 
 async function seedStatuses() {
   const snap = await getDocs(collection(db,'statuses'));
   if (snap.empty) {
     const defaults = [
-      { label:'未处理',  color:COLORS[0], order:0 },
-      { label:'初步联系', color:COLORS[1], order:1 },
+      { label:'未处理',  color:COLORS[1], order:0 },
+      { label:'初步联系', color:COLORS[4], order:1 },
       { label:'接单',    color:COLORS[2], order:2 },
+      { label:'拒绝',    color:COLORS[0], order:3 },
     ];
     for (const s of defaults) await addDoc(collection(db,'statuses'), s);
   }
@@ -326,112 +313,110 @@ function startListeners() {
   });
 }
 
-// ── Render ───────────────────────────────────────────────
+// ── Render Logic ──
 function renderAll() {
   document.getElementById('total-label').textContent = `共 ${users.length} 位用户`;
-  const rows = [
+  const statItems = [
     { label:'全部', value:users.length, dot:'#888780' },
     ...statuses.map(s => ({ label:s.label, value:users.filter(u=>u.statusId===s.id).length, dot:s.color?.dot||'#888' }))
   ];
-  document.getElementById('stats-row').innerHTML = rows.map(r => `
+  document.getElementById('stats-row').innerHTML = statItems.map(r => `
     <div class="stat">
       <div class="stat-label"><span class="stat-dot" style="background:${r.dot}"></span>${r.label}</div>
       <div class="stat-value">${r.value}</div>
     </div>`).join('');
+  
   const tabs = [{ id:'all', label:'全部' }, ...statuses.map(s => ({ id:s.id, label:s.label }))];
   document.getElementById('filter-tabs').innerHTML = tabs.map(t =>
-    `<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf(${JSON.stringify(t.id)})">${t.label}</button>`
+    `<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf('${t.id}')">${t.label}</button>`
   ).join('');
   renderList();
 }
 
+window.resetPageAndRender = () => { currentPage = 1; renderList(); };
+
 window.renderList = function() {
   const q = (document.getElementById('search-input').value||'').trim().toLowerCase();
-  const list = users.filter(u => {
-    const mQ = !q || [u.name,u.phone,u.wechat,u.addr].some(v => v&&v.toLowerCase().includes(q));
-    const mF = activeFilter==='all' || u.statusId===activeFilter;
+  
+  // Filtering
+  const filtered = users.filter(u => {
+    const mQ = !q || [u.name, u.phone, u.wechat, u.addr].some(v => v && v.toLowerCase().includes(q));
+    const mF = activeFilter === 'all' || u.statusId === activeFilter;
     return mQ && mF;
   });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pagedList = filtered.slice(start, end);
+
+  // Update Pagination UI
+  document.getElementById('page-info').textContent = `第 ${currentPage} / ${totalPages} 页 (显示 ${pagedList.length} 条)`;
+  document.getElementById('prev-page').disabled = currentPage <= 1;
+  document.getElementById('next-page').disabled = currentPage >= totalPages;
+  document.getElementById('pagination-ctrl').style.display = filtered.length > PAGE_SIZE ? 'flex' : (filtered.length > 0 ? 'flex' : 'none');
+
   const el = document.getElementById('user-list');
-  if (!list.length) { el.innerHTML=`<div class="empty"><i class="ti ti-users"></i>暂无用户</div>`; return; }
-  el.innerHTML = list.map((u,i) => {
-    const s  = statuses.find(x=>x.id===u.statusId)||{ label:'未分类', color:COLORS[0] };
-    const bg = AVATAR_BG[i%AVATAR_BG.length], tx = AVATAR_TX[i%AVATAR_TX.length];
-    return `<div class="user-card">
+  if (!pagedList.length) { el.innerHTML=`<div class="empty"><i class="ti ti-users"></i>暂无符合条件的用户</div>`; return; }
+
+  el.innerHTML = pagedList.map((u, i) => {
+    const s = statuses.find(x=>x.id===u.statusId) || { label:'未分类', color: {bg:'#eee', tx:'#666'} };
+    const bg = AVATAR_BG[i % AVATAR_BG.length], tx = AVATAR_TX[i % AVATAR_TX.length];
+    
+    // Google Maps Link Logic
+    const mapQuery = encodeURIComponent(u.addr || u.name);
+    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
+    return `
+    <div class="user-card" onclick="if(!event.target.closest('button')) window.open('${mapUrl}', '_blank')">
       <div class="avatar" style="background:${bg};color:${tx}">${(u.name||'?').slice(0,2)}</div>
       <div class="user-info">
-        <div class="user-name">${u.name||''}</div>
+        <div class="user-name">${u.name||'未命名'}</div>
         <div class="user-meta">
-          ${u.addr  ?`<span><i class="ti ti-map-pin" style="font-size:13px"></i>${u.addr}</span>`:''}
-          ${u.phone ?`<span><i class="ti ti-phone" style="font-size:13px"></i>${u.phone}</span>`:''}
-          ${u.wechat?`<span><i class="ti ti-brand-wechat" style="font-size:13px"></i>${u.wechat}</span>`:''}
+          ${u.addr ? `<span title="点击在地图查看"><i class="ti ti-map-pin"></i>${u.addr}</span>` : ''}
+          ${u.phone ? `<span><i class="ti ti-phone"></i>${u.phone}</span>` : ''}
+          ${u.wechat ? `<span><i class="ti ti-brand-wechat"></i>${u.wechat}</span>` : ''}
         </div>
       </div>
       <span class="badge" style="background:${s.color?.bg};color:${s.color?.tx}">${s.label}</span>
       <div class="actions">
-        <button class="icon-btn" onclick="window._eu('${u.id}')" aria-label="编辑"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn danger" onclick="window._du('${u.id}')" aria-label="删除"><i class="ti ti-trash"></i></button>
+        <button class="icon-btn" onclick="event.stopPropagation(); window._eu('${u.id}')"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn danger" onclick="event.stopPropagation(); window._du('${u.id}')"><i class="ti ti-trash"></i></button>
       </div>
     </div>`;
   }).join('');
 };
 
-function renderStatusListUI() {
-  document.getElementById('status-list-ui').innerHTML = statuses.map(s => `
-    <div class="status-item-ui">
-      <span class="status-name-ui">
-        <span style="width:10px;height:10px;border-radius:50%;background:${s.color?.dot};display:inline-block"></span>
-        ${s.label}
-      </span>
-      <button class="icon-btn danger" onclick="window._ds('${s.id}')" aria-label="删除"><i class="ti ti-x" style="font-size:13px"></i></button>
-    </div>`).join('');
-}
+window.changePage = (dir) => {
+  currentPage += dir;
+  renderList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
-function renderColorOpts() {
-  document.getElementById('color-opts').innerHTML = COLORS.map((c,i) =>
-    `<div class="color-opt ${c===selectedColor?'sel':''}" style="background:${c.dot}" onclick="window._sc(${i})"></div>`
-  ).join('');
-}
-
-// ── Actions ──────────────────────────────────────────────
-window._sf = id => { activeFilter=id; renderAll(); };
+// ── CRUD Actions ──
+window._sf = id => { activeFilter=id; currentPage=1; renderAll(); };
 window._sc = i  => { selectedColor=COLORS[i]; renderColorOpts(); };
 
 window._eu = id => {
   const u = users.find(x=>x.id===id); if(!u) return;
-  editingId=id;
-  document.getElementById('modal-title').textContent='编辑用户';
-  document.getElementById('f-name').value  = u.name||'';
-  document.getElementById('f-addr').value  = u.addr||'';
+  editingId=id; document.getElementById('modal-title').textContent='编辑用户';
+  document.getElementById('f-name').value = u.name||'';
+  document.getElementById('f-addr').value = u.addr||'';
   document.getElementById('f-phone').value = u.phone||'';
   document.getElementById('f-wechat').value= u.wechat||'';
-  refreshStatusSelect(u.statusId);
-  openModal('add-modal');
+  refreshStatusSelect(u.statusId); openModal('add-modal');
 };
 
 window._du = async id => {
   if(!confirm('确认删除该用户？')) return;
-  await deleteDoc(doc(db,'users',id));
-  toast('已删除用户');
-};
-
-window._ds = async id => {
-  if(users.some(u=>u.statusId===id)){ alert('该分类下还有用户，无法删除'); return; }
-  await deleteDoc(doc(db,'statuses',id));
-  toast('已删除分类'); renderStatusListUI();
-};
-
-window.openAddModal = () => {
-  editingId=null;
-  document.getElementById('modal-title').textContent='添加用户';
-  ['f-name','f-addr','f-phone','f-wechat'].forEach(id=>document.getElementById(id).value='');
-  refreshStatusSelect(); openModal('add-modal');
+  await deleteDoc(doc(db,'users',id)); toast('已删除用户');
 };
 
 window.saveUser = async () => {
   const name = document.getElementById('f-name').value.trim();
   if(!name){ alert('请输入用户名'); return; }
-  document.getElementById('save-btn-text').textContent='保存中…';
   const data = {
     name, addr:document.getElementById('f-addr').value.trim(),
     phone:document.getElementById('f-phone').value.trim(),
@@ -439,36 +424,52 @@ window.saveUser = async () => {
     statusId:document.getElementById('f-status').value,
   };
   try {
-    if(editingId){ await updateDoc(doc(db,'users',editingId),data); toast('已更新用户'); }
-    else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'),data); toast('已添加用户'); }
+    if(editingId){ await updateDoc(doc(db,'users',editingId), data); toast('已更新'); }
+    else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'), data); toast('已添加'); }
     closeModal('add-modal');
-  } catch(e){ alert('保存失败：'+e.message); }
-  document.getElementById('save-btn-text').textContent='保存';
+  } catch(e){ alert('保存错误'); }
 };
 
+// ── Status Management ──
 window.openStatusModal = () => { renderStatusListUI(); renderColorOpts(); openModal('status-modal'); };
-
 window.addStatus = async () => {
   const name = document.getElementById('new-status-name').value.trim();
-  if(!name){ alert('请输入分类名称'); return; }
+  if(!name) return;
   await addDoc(collection(db,'statuses'),{ label:name, color:selectedColor, order:statuses.length });
-  document.getElementById('new-status-name').value='';
-  toast('已添加分类'); renderStatusListUI();
+  document.getElementById('new-status-name').value=''; renderStatusListUI();
+};
+window._ds = async id => {
+  if(users.some(u=>u.statusId===id)){ alert('该分类下有用户，无法删除'); return; }
+  await deleteDoc(doc(db,'statuses',id)); renderStatusListUI();
 };
 
+function renderStatusListUI() {
+  document.getElementById('status-list-ui').innerHTML = statuses.map(s => `
+    <div class="status-item-ui">
+      <span class="status-name-ui"><span style="width:10px;height:10px;border-radius:50%;background:${s.color?.dot}"></span>${s.label}</span>
+      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+}
+function renderColorOpts() {
+  document.getElementById('color-opts').innerHTML = COLORS.map((c,i) =>
+    `<div class="color-opt ${c===selectedColor?'sel':''}" style="background: ${c.dot}" onclick="window._sc(${i})"></div>`
+  ).join('');
+}
 function refreshStatusSelect(selId) {
   document.getElementById('f-status').innerHTML = statuses.map(s=>
     `<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
 }
-
+window.openAddModal = () => {
+  editingId=null; document.getElementById('modal-title').textContent='添加用户';
+  ['f-name','f-addr','f-phone','f-wechat'].forEach(id=>document.getElementById(id).value='');
+  refreshStatusSelect(); openModal('add-modal');
+};
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 window.bgClose = (e,id) => { if(e.target.id===id) window.closeModal(id); };
-
 function toast(msg) {
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2200);
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
 }
 </script>
 </body>
