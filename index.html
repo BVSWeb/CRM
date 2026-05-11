@@ -13,6 +13,7 @@
     --text: #1a1a18; --text2: #6b6a65; --text3: #9b9a95;
     --radius: 10px; --radius-lg: 14px;
     --accent: #378ADD; --accent-bg: rgba(55,138,221,0.12);
+    --wa: #25D366; --wa-dark: #128C7E;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -42,7 +43,7 @@
 
   /* ── App ── */
   #app-page { display:none; }
-  .app { max-width:860px; margin:0 auto; padding:2rem 1.25rem; }
+  .app { max-width:960px; margin:0 auto; padding:2rem 1.25rem; }
   .header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.75rem; gap:12px; flex-wrap:wrap; }
   .header h1 { font-size:22px; font-weight:500; }
   .header-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
@@ -65,61 +66,86 @@
   .ftab.active { background:var(--text); color:var(--bg); border-color:var(--text); }
   .ftab:hover:not(.active) { background:var(--surface2); }
 
+  /* ── User Card ── */
   .user-list { display:flex; flex-direction:column; gap:8px; }
-  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; position: relative; }
-  .user-card:hover { border-color:var(--accent); background: var(--bg); }
+  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; flex-wrap: wrap; }
+  .user-card:hover { border-color:var(--border2); }
   .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:500; font-size:14px; flex-shrink:0; }
-  .user-info { flex:1; min-width:0; }
-  .user-name { font-size:14px; font-weight:500; display: flex; align-items: center; gap: 6px; }
-  .ti-external-link { font-size: 14px; color: var(--accent); opacity: 0.6; }
-  .user-meta { font-size:12px; color:var(--text2); margin-top:4px; display:flex; gap:14px; flex-wrap:wrap; }
+  .user-info { flex:1; min-width:180px; }
+  .user-name { font-size:14px; font-weight:500; display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .user-name:hover { color:var(--accent); }
+  .user-meta { font-size:12px; color:var(--text2); margin-top:4px; display:flex; gap:12px; flex-wrap:wrap; }
   .user-meta span { display:flex; align-items:center; gap:4px; }
   .badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:500; white-space:nowrap; flex-shrink:0; }
-  .actions { display:flex; gap:6px; flex-shrink:0; }
+
+  /* ── Action buttons ── */
+  .card-right { display:flex; align-items:center; gap:8px; flex-wrap:wrap; flex-shrink:0; }
+  .wa-group { display:flex; gap:6px; }
+
+  .btn { padding:7px 12px; font-size:12px; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:5px; transition:all 0.15s; border:0.5px solid var(--border2); background:var(--surface); color:var(--text2); white-space:nowrap; }
+  .btn:hover:not(:disabled) { background:var(--surface2); }
+  .btn:disabled { opacity:0.3; cursor:not-allowed; }
+  .btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
+  .btn-primary:hover:not(:disabled) { opacity:0.85; background:var(--text); }
+  .btn-wa { background:var(--wa); color:#fff; border-color:var(--wa); font-weight:500; }
+  .btn-wa:hover { background:#20ba58; border-color:#20ba58; }
+  .btn-wa-outline { background:transparent; color:var(--wa-dark); border-color:var(--wa); }
+  .btn-wa-outline:hover { background:#E1F5EE; }
+  .btn-sm { padding:6px 10px; font-size:12px; }
+
   .icon-btn { width:30px; height:30px; border-radius:var(--radius); border:0.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); font-size:15px; transition:all 0.15s; }
   .icon-btn:hover { background:var(--surface2); color:var(--text); }
-  .icon-btn.danger:hover { color:#A32D2D; border-color: #A32D2D; }
+  .icon-btn.danger:hover { color:#A32D2D; border-color:#A32D2D; }
 
-  .pagination { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 2rem; padding: 1rem; border-top: 0.5px solid var(--border); }
-  .page-info { font-size: 13px; color: var(--text2); }
+  /* ── Pagination ── */
+  .pagination { display:flex; align-items:center; justify-content:center; gap:15px; margin-top:2rem; padding-top:1rem; border-top:0.5px solid var(--border); }
+  .page-info { font-size:13px; color:var(--text2); }
 
   .empty { text-align:center; padding:4rem 1rem; color:var(--text2); font-size:14px; background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); }
-  .btn { padding:7px 14px; font-size:13px; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s; border:0.5px solid var(--border2); background:var(--surface); color:var(--text2); }
-  .btn:hover:not(:disabled) { background:var(--surface2); }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
 
+  /* ── Modal ── */
   .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:200; padding:1rem; }
   .overlay.open { display:flex; }
-  .modal { background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); width:100%; max-width:440px; padding:1.5rem; }
+  .modal { background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); width:100%; max-width:480px; padding:1.5rem; max-height:90vh; overflow-y:auto; }
+  .modal h3 { font-size:16px; font-weight:500; margin-bottom:1.25rem; }
   .form-group { margin-bottom:1rem; }
   .form-group label { font-size:12px; color:var(--text2); display:block; margin-bottom:5px; }
-  .form-group input, .form-group select { width:100%; padding:8px 10px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
+  .form-group input, .form-group select, .form-group textarea { width:100%; padding:8px 10px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
+  .form-group textarea { resize:vertical; min-height:80px; line-height:1.5; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
   .modal-footer { display:flex; justify-content:flex-end; gap:8px; margin-top:1.25rem; }
+  .modal-section { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:0.06em; margin:1.25rem 0 0.75rem; padding-bottom:0.5rem; border-bottom:0.5px solid var(--border); }
 
+  /* ── Status modal ── */
   .status-list-ui { display:flex; flex-direction:column; gap:6px; margin-bottom:1rem; max-height:220px; overflow-y:auto; }
   .status-item-ui { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:var(--radius); border:0.5px solid var(--border); }
-  
-  .add-status-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .add-status-row input { flex: 1; padding: 8px; border-radius: var(--radius); border: 0.5px solid var(--border2); outline: none; font-size: 13px; }
+  .add-status-row { display:flex; gap:8px; align-items:center; margin-top:10px; }
+  .add-status-row input { flex:1; padding:8px; border-radius:var(--radius); border:0.5px solid var(--border2); outline:none; font-size:13px; background:var(--surface); color:var(--text); font-family:inherit; }
   .color-opts { display:flex; gap:6px; }
-  .color-opt { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition: all 0.2s; }
-  .color-opt.sel { border-color: var(--text); transform: scale(1.15); }
+  .color-opt { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
+  .color-opt.sel { border-color:var(--text); transform:scale(1.15); }
 
-  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:9px 18px; border-radius:var(--radius); font-size:13px; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  /* ── WA Template modal ── */
+  .wa-preview { background:var(--surface2); border-radius:var(--radius); padding:10px 12px; font-size:13px; color:var(--text2); line-height:1.6; margin-top:6px; white-space:pre-wrap; word-break:break-word; border:0.5px solid var(--border); min-height:60px; }
+  .template-tabs { display:flex; gap:6px; margin-bottom:1rem; }
+  .ttab { font-size:12px; padding:5px 12px; border-radius:var(--radius); border:0.5px solid var(--border2); background:transparent; color:var(--text2); cursor:pointer; font-family:inherit; }
+  .ttab.active { background:var(--wa); color:#fff; border-color:var(--wa); }
+
+  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:9px 18px; border-radius:var(--radius); font-size:13px; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; white-space:nowrap; }
   .toast.show { opacity:1; }
 </style>
 </head>
 <body>
 
+<!-- ── Login ── -->
 <div id="login-page">
   <div class="login-card">
     <div class="login-logo"><i class="ti ti-users"></i></div>
     <h2>用户管理系统</h2>
     <p>请输入密码以继续</p>
-    <div class="email-display"><i class="ti ti-mail"></i> <span id="show-email">admin@bvsweb.com</span></div>
+    <div class="email-display"><i class="ti ti-mail"></i><span>admin@bvsweb.com</span></div>
     <div class="pw-wrap">
-      <input type="password" id="login-pw" placeholder="密码">
+      <input type="password" id="login-pw" placeholder="密码" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="pw-toggle" onclick="togglePw()"><i class="ti ti-eye" id="pw-eye"></i></button>
     </div>
     <div class="login-err" id="login-err"></div>
@@ -127,21 +153,25 @@
   </div>
 </div>
 
+<!-- ── App ── -->
 <div id="app-page">
   <div class="app">
     <div class="header">
       <div>
-        <h1>用户管理</h1>
-        <p id="total-label">正在加载…</p>
+        <h1>餐厅管理</h1>
+        <p id="total-label" style="font-size:13px;color:var(--text2);margin-top:3px;">正在加载…</p>
       </div>
       <div class="header-actions">
-        <div class="user-pill"><i class="ti ti-user"></i><span id="authed-email"></span></div>
+        <div class="user-pill"><i class="ti ti-user" style="font-size:13px"></i><span id="authed-email"></span></div>
+        <button class="btn" onclick="openWaTemplateModal()"><i class="ti ti-brand-whatsapp"></i>消息模板</button>
         <button class="btn" onclick="doLogout()"><i class="ti ti-logout"></i>退出</button>
         <button class="btn" onclick="openStatusModal()"><i class="ti ti-tag"></i>分类管理</button>
-        <button class="btn btn-primary" onclick="openAddModal()"><i class="ti ti-plus"></i>添加用户</button>
+        <button class="btn btn-primary" onclick="openAddModal()"><i class="ti ti-plus"></i>添加餐厅</button>
       </div>
     </div>
+
     <div class="stats" id="stats-row"></div>
+
     <div class="controls">
       <div class="search-wrap">
         <i class="ti ti-search"></i>
@@ -149,9 +179,10 @@
       </div>
       <div class="filter-tabs" id="filter-tabs"></div>
     </div>
+
     <div class="user-list" id="user-list"></div>
 
-    <div class="pagination" id="pagination-ctrl">
+    <div class="pagination">
       <button class="btn" id="prev-page" onclick="changePage(-1)"><i class="ti ti-chevron-left"></i> 上一页</button>
       <span class="page-info" id="page-info">第 1 页</span>
       <button class="btn" id="next-page" onclick="changePage(1)">下一页 <i class="ti ti-chevron-right"></i></button>
@@ -159,12 +190,13 @@
   </div>
 </div>
 
+<!-- Add/Edit Modal -->
 <div class="overlay" id="add-modal" onclick="bgClose(event,'add-modal')">
   <div class="modal">
-    <h3 id="modal-title">添加用户</h3>
+    <h3 id="modal-title">添加餐厅</h3>
     <div class="form-group"><label>店名 *</label><input id="f-name" type="text"></div>
     <div class="form-group"><label>地址</label><input id="f-addr" type="text"></div>
-    <div class="form-group"><label>电话</label><input id="f-phone" type="text"></div>
+    <div class="form-group"><label>电话（意大利格式，如 +39 02 1234567）</label><input id="f-phone" type="text" placeholder="+39..."></div>
     <div class="form-group"><label>微信</label><input id="f-wechat" type="text"></div>
     <div class="form-group"><label>分类</label><select id="f-status"></select></div>
     <div class="modal-footer">
@@ -174,8 +206,9 @@
   </div>
 </div>
 
+<!-- Status Modal -->
 <div class="overlay" id="status-modal" onclick="bgClose(event,'status-modal')">
-  <div class="modal">
+  <div class="modal" style="max-width:380px;">
     <h3>分类管理</h3>
     <div class="status-list-ui" id="status-list-ui"></div>
     <div class="add-status-row">
@@ -184,6 +217,34 @@
       <button class="btn btn-primary" onclick="addStatus()">添加</button>
     </div>
     <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('status-modal')">关闭</button></div>
+  </div>
+</div>
+
+<!-- WhatsApp Template Modal -->
+<div class="overlay" id="wa-modal" onclick="bgClose(event,'wa-modal')">
+  <div class="modal" style="max-width:520px;">
+    <h3><i class="ti ti-brand-whatsapp" style="color:var(--wa)"></i> WhatsApp 消息模板</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:1rem;">用 <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;">{name}</code> 代表餐厅名字，发送时自动替换</p>
+
+    <div class="template-tabs">
+      <button class="ttab active" id="ttab-0" onclick="switchTmplTab(0)">👋 打招呼</button>
+      <button class="ttab" id="ttab-1" onclick="switchTmplTab(1)">📄 发报价</button>
+      <button class="ttab" id="ttab-2" onclick="switchTmplTab(2)">📦 发附件</button>
+    </div>
+
+    <div class="form-group">
+      <label>模板内容（可直接编辑）</label>
+      <textarea id="tmpl-editor" rows="5" oninput="updatePreview()"></textarea>
+    </div>
+    <div class="form-group">
+      <label>预览效果</label>
+      <div class="wa-preview" id="tmpl-preview"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="resetTemplate()"><i class="ti ti-refresh"></i> 重置默认</button>
+      <button class="btn btn-primary" onclick="saveTemplates(); closeModal('wa-modal')"><i class="ti ti-check"></i> 保存模板</button>
+    </div>
   </div>
 </div>
 
@@ -203,115 +264,234 @@ const firebaseConfig = {
   appId: "1:449976422801:web:79d0b243dc6fcf9df28a30"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
 let users = [], statuses = [];
 let activeFilter = 'all', editingId = null;
 let currentPage = 1;
 const PAGE_SIZE = 100;
+const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'];
+const AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
 
 const COLORS = [
-  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' }, // 红 (拒绝)
-  { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' }, // 蓝
-  { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' }, // 绿
-  { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' }, // 橙
-  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' }  // 紫
+  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' },
+  { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' },
+  { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' },
+  { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' },
+  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' }
 ];
 let selectedColor = COLORS[0];
+
+// ── WhatsApp Templates ───────────────────────────────────
+const DEFAULT_TEMPLATES = [
+  `Ciao {name}! 👋\nSono [il tuo nome] di [azienda]. Volevo presentarmi e capire se possiamo collaborare insieme.\nPossiamo sentirci?`,
+  `Ciao {name}! 📄\nTi invio il nostro listino prezzi aggiornato.\nFammi sapere se hai domande o vuoi un preventivo personalizzato!`,
+  `Ciao {name}! 📦\nTi mando in allegato il nostro catalogo prodotti.\nSiamo disponibili per qualsiasi informazione aggiuntiva. A presto!`
+];
+
+let templates = [...DEFAULT_TEMPLATES];
+let activeTmplTab = 0;
+
+function loadTemplates() {
+  try {
+    const saved = localStorage.getItem('wa_templates');
+    if (saved) templates = JSON.parse(saved);
+  } catch {}
+}
+function saveTemplates() {
+  templates[activeTmplTab] = document.getElementById('tmpl-editor').value;
+  localStorage.setItem('wa_templates', JSON.stringify(templates));
+  toast('模板已保存');
+}
+window.saveTemplates = saveTemplates;
+
+function buildWaUrl(phone, name, tmplIndex) {
+  const raw = (phone || '').replace(/\s/g, '');
+  // Ensure Italian number has country code
+  let clean = raw.replace(/\D/g,'');
+  if (clean.startsWith('0') && !clean.startsWith('00')) clean = '39' + clean.slice(0);
+  if (!clean.startsWith('39') && clean.length <= 10) clean = '39' + clean;
+
+  const msg = templates[tmplIndex].replace(/\{name\}/g, name || '');
+  return `https://wa.me/${clean}?text=${encodeURIComponent(msg)}`;
+}
+
+window.openWaTemplateModal = () => {
+  switchTmplTab(0);
+  openModal('wa-modal');
+};
+
+window.switchTmplTab = (i) => {
+  // Save current tab content first
+  if (document.getElementById('tmpl-editor')) {
+    templates[activeTmplTab] = document.getElementById('tmpl-editor').value;
+  }
+  activeTmplTab = i;
+  [0,1,2].forEach(j => document.getElementById(`ttab-${j}`).classList.toggle('active', j===i));
+  document.getElementById('tmpl-editor').value = templates[i];
+  updatePreview();
+};
+
+window.updatePreview = () => {
+  const txt = document.getElementById('tmpl-editor').value;
+  document.getElementById('tmpl-preview').textContent = txt.replace(/\{name\}/g, '【餐厅名字】');
+};
+
+window.resetTemplate = () => {
+  document.getElementById('tmpl-editor').value = DEFAULT_TEMPLATES[activeTmplTab];
+  updatePreview();
+};
+
+// ── Auth ─────────────────────────────────────────────────
+window.doLogin = async () => {
+  const pw  = document.getElementById('login-pw').value;
+  const err = document.getElementById('login-err');
+  const btn = document.getElementById('login-btn');
+  if (!pw) { err.textContent='请输入密码'; return; }
+  err.textContent=''; btn.disabled=true; btn.textContent='登录中…';
+  try {
+    await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', pw);
+  } catch(e) {
+    err.textContent = (e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') ? '密码错误，请重试'
+      : e.code==='auth/too-many-requests' ? '尝试次数过多，请稍后'
+      : '登录失败：'+e.message;
+    btn.disabled=false; btn.innerHTML='<i class="ti ti-login"></i> 登录';
+  }
+};
+window.doLogout = () => signOut(auth);
+window.togglePw = () => {
+  const i=document.getElementById('login-pw');
+  i.type=i.type==='password'?'text':'password';
+  document.getElementById('pw-eye').className=i.type==='password'?'ti ti-eye':'ti ti-eye-off';
+};
 
 onAuthStateChanged(auth, user => {
   if (user) {
     document.getElementById('login-page').style.display='none';
     document.getElementById('app-page').style.display='block';
-    document.getElementById('authed-email').textContent = user.email;
+    document.getElementById('authed-email').textContent=user.email;
+    loadTemplates();
     initApp();
   } else {
     document.getElementById('login-page').style.display='flex';
     document.getElementById('app-page').style.display='none';
+    document.getElementById('login-btn').disabled=false;
+    document.getElementById('login-btn').innerHTML='<i class="ti ti-login"></i> 登录';
   }
 });
 
+// ── Firestore ────────────────────────────────────────────
 async function initApp() {
-  const sSnap = await getDocs(collection(db, 'statuses'));
-  const currentLabels = sSnap.docs.map(d => d.data().label);
-  if (!currentLabels.includes('拒绝')) {
-    await addDoc(collection(db, 'statuses'), { label: '拒绝', color: COLORS[0], order: 99 });
+  const sSnap = await getDocs(collection(db,'statuses'));
+  const labels = sSnap.docs.map(d=>d.data().label);
+  if (!labels.includes('拒绝')) {
+    await addDoc(collection(db,'statuses'), {label:'拒绝', color:COLORS[0], order:99});
   }
 
-  onSnapshot(collection(db, 'statuses'), snap => {
-    statuses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    statuses.sort((a,b) => (a.order||0)-(b.order||0));
+  onSnapshot(collection(db,'statuses'), snap => {
+    statuses = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0));
     renderAll();
   });
-
-  onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc')), snap => {
-    users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  onSnapshot(query(collection(db,'users'), orderBy('createdAt','desc')), snap => {
+    users = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderAll();
   });
 }
 
+// ── Render ───────────────────────────────────────────────
 function renderAll() {
-  document.getElementById('total-label').textContent = `共 ${users.length} 条记录`;
-  const statHTML = [{label:'全部', val:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, val:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
-  document.getElementById('stats-row').innerHTML = statHTML.map(s=>`<div class="stat"><div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
-  
-  const tabs = [{id:'all', label:'全部'}, ...statuses.map(s=>({id:s.id, label:s.label}))];
-  document.getElementById('filter-tabs').innerHTML = tabs.map(t=>`<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf('${t.id}')">${t.label}</button>`).join('');
+  document.getElementById('total-label').textContent=`共 ${users.length} 家餐厅`;
+
+  const statData = [{label:'全部',val:users.length,dot:'#888'}, ...statuses.map(s=>({label:s.label,val:users.filter(u=>u.statusId===s.id).length,dot:s.color.dot}))];
+  document.getElementById('stats-row').innerHTML = statData.map(s=>`
+    <div class="stat"><div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
+
+  const tabs = [{id:'all',label:'全部'}, ...statuses.map(s=>({id:s.id,label:s.label}))];
+  document.getElementById('filter-tabs').innerHTML = tabs.map(t=>
+    `<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf('${t.id}')">${t.label}</button>`
+  ).join('');
+
   renderList();
 }
 
 window.renderList = () => {
   const q = document.getElementById('search-input').value.toLowerCase();
   const filtered = users.filter(u => {
-    const mSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
-    const mFilter = activeFilter === 'all' || u.statusId === activeFilter;
-    return mSearch && mFilter;
+    const mS = !q || [u.name,u.addr,u.phone].some(v=>v?.toLowerCase().includes(q));
+    const mF = activeFilter==='all' || u.statusId===activeFilter;
+    return mS && mF;
   });
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+  const totalPages = Math.ceil(filtered.length/PAGE_SIZE)||1;
   const paged = filtered.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
 
-  document.getElementById('page-info').textContent = `第 ${currentPage} / ${totalPages} 页`;
-  document.getElementById('prev-page').disabled = currentPage <= 1;
-  document.getElementById('next-page').disabled = currentPage >= totalPages;
+  document.getElementById('page-info').textContent=`第 ${currentPage} / ${totalPages} 页（共 ${filtered.length} 条）`;
+  document.getElementById('prev-page').disabled = currentPage<=1;
+  document.getElementById('next-page').disabled = currentPage>=totalPages;
 
   const listEl = document.getElementById('user-list');
-  if(!paged.length) { listEl.innerHTML='<div class="empty">无匹配结果</div>'; return; }
+  if (!paged.length) { listEl.innerHTML='<div class="empty">无匹配结果</div>'; return; }
 
-  listEl.innerHTML = paged.map((u, i) => {
-    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color: {bg:'#eee', tx:'#666', dot:'#888'}};
-    const mapUrl = u.placeId 
+  listEl.innerHTML = paged.map((u,i) => {
+    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类',color:{bg:'#eee',tx:'#666',dot:'#888'}};
+    const mapUrl = u.placeId
       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((u.name||'')+' '+(u.addr||''))}`;
+    const hasPhone = u.phone && u.phone.trim();
 
     return `
-    <div class="user-card" onclick="if(!event.target.closest('button')) window.open('${mapUrl}','_blank')">
+    <div class="user-card">
       <div class="avatar" style="background:${AVATAR_BG[i%6]};color:${AVATAR_TX[i%6]}">${(u.name||'?').slice(0,2)}</div>
       <div class="user-info">
-        <div class="user-name">${u.name} <i class="ti ti-external-link"></i></div>
+        <div class="user-name" onclick="window.open('${mapUrl}','_blank')">
+          ${u.name||'无名'} <i class="ti ti-external-link" style="font-size:13px;color:var(--accent);opacity:0.6"></i>
+        </div>
         <div class="user-meta">
-          <span><i class="ti ti-map-pin"></i>${u.addr || '无地址'}</span>
-          ${u.phone?`<span><i class="ti ti-phone"></i>${u.phone}</span>`:''}
+          <span><i class="ti ti-map-pin"></i>${u.addr||'无地址'}</span>
+          ${hasPhone?`<span><i class="ti ti-phone"></i>${u.phone}</span>`:''}
         </div>
       </div>
-      <span class="badge" style="background:${s.color.bg};color:${s.color.tx}">${s.label}</span>
-      <div class="actions">
-        <button class="icon-btn" onclick="event.stopPropagation(); window._eu('${u.id}')"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn danger" onclick="event.stopPropagation(); window._du('${u.id}')"><i class="ti ti-trash"></i></button>
+      <div class="card-right">
+        <span class="badge" style="background:${s.color.bg};color:${s.color.tx}">${s.label}</span>
+        ${hasPhone ? `
+        <div class="wa-group">
+          <button class="btn btn-wa btn-sm" onclick="event.stopPropagation(); window.open('${buildWaUrl(u.phone,u.name,0)}','_blank')" title="打招呼">
+            <i class="ti ti-brand-whatsapp"></i> 打招呼
+          </button>
+          <button class="btn btn-wa-outline btn-sm" onclick="event.stopPropagation(); window.open('${buildWaUrl(u.phone,u.name,1)}','_blank')" title="发报价">
+            <i class="ti ti-file-text"></i> 报价
+          </button>
+          <button class="btn btn-wa-outline btn-sm" onclick="event.stopPropagation(); window.open('${buildWaUrl(u.phone,u.name,2)}','_blank')" title="发附件">
+            <i class="ti ti-paperclip"></i> 附件
+          </button>
+        </div>` : `<span style="font-size:11px;color:var(--text3)">无电话</span>`}
+        <div style="display:flex;gap:5px">
+          <button class="icon-btn" onclick="event.stopPropagation(); window._eu('${u.id}')" title="编辑"><i class="ti ti-edit"></i></button>
+          <button class="icon-btn danger" onclick="event.stopPropagation(); window._du('${u.id}')" title="删除"><i class="ti ti-trash"></i></button>
+        </div>
       </div>
     </div>`;
   }).join('');
 };
 
-window.resetPageAndRender = () => { currentPage = 1; renderList(); };
-window.changePage = d => { currentPage += d; renderList(); window.scrollTo(0,0); };
+window.resetPageAndRender = () => { currentPage=1; renderList(); };
+window.changePage = d => { currentPage+=d; renderList(); window.scrollTo(0,0); };
 window._sf = id => { activeFilter=id; currentPage=1; renderAll(); };
 
+// ── CRUD ─────────────────────────────────────────────────
+window.openAddModal = () => {
+  editingId=null;
+  document.getElementById('modal-title').textContent='添加餐厅';
+  ['f-name','f-addr','f-phone','f-wechat'].forEach(id=>document.getElementById(id).value='');
+  refreshStatusSelect(); openModal('add-modal');
+};
+
 window._eu = id => {
-  const u = users.find(x=>x.id===id); editingId=id;
-  document.getElementById('modal-title').textContent='编辑用户';
+  const u=users.find(x=>x.id===id); if(!u) return;
+  editingId=id;
+  document.getElementById('modal-title').textContent='编辑餐厅';
   document.getElementById('f-name').value=u.name||'';
   document.getElementById('f-addr').value=u.addr||'';
   document.getElementById('f-phone').value=u.phone||'';
@@ -319,70 +499,74 @@ window._eu = id => {
   refreshStatusSelect(u.statusId); openModal('add-modal');
 };
 
-window._du = async id => { if(confirm('确认删除？')) await deleteDoc(doc(db,'users',id)); };
-
-window.saveUser = async () => {
-  const data = {
-    name: document.getElementById('f-name').value,
-    addr: document.getElementById('f-addr').value,
-    phone: document.getElementById('f-phone').value,
-    wechat: document.getElementById('f-wechat').value,
-    statusId: document.getElementById('f-status').value
-  };
-  if(editingId) await updateDoc(doc(db,'users',editingId), data);
-  else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'), data); }
-  closeModal('add-modal'); toast('已保存');
+window._du = async id => {
+  if(confirm('确认删除这家餐厅？')) await deleteDoc(doc(db,'users',id));
 };
 
+window.saveUser = async () => {
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){ alert('请填写店名'); return; }
+  document.getElementById('save-btn-text').textContent='保存中…';
+  const data={
+    name, addr:document.getElementById('f-addr').value.trim(),
+    phone:document.getElementById('f-phone').value.trim(),
+    wechat:document.getElementById('f-wechat').value.trim(),
+    statusId:document.getElementById('f-status').value
+  };
+  try {
+    if(editingId) await updateDoc(doc(db,'users',editingId),data);
+    else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'),data); }
+    closeModal('add-modal'); toast('已保存');
+  } catch(e){ alert('保存失败：'+e.message); }
+  document.getElementById('save-btn-text').textContent='保存';
+};
+
+// ── Status modal ─────────────────────────────────────────
 window.openStatusModal = () => { renderStatusListUI(); renderColorOpts(); openModal('status-modal'); };
 
 window.addStatus = async () => {
-  const input = document.getElementById('new-status-name');
-  const label = input.value.trim();
-  if(!label) return;
-  await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
-  input.value='';
+  const input=document.getElementById('new-status-name');
+  const label=input.value.trim(); if(!label) return;
+  await addDoc(collection(db,'statuses'),{label,color:selectedColor,order:statuses.length});
+  input.value=''; toast('已添加分类');
 };
 
-window._ds = async id => { 
-  if(users.some(u=>u.statusId===id)) { alert('该分类下有用户'); return; }
-  await deleteDoc(doc(db,'statuses',id)); 
+window._ds = async id => {
+  if(users.some(u=>u.statusId===id)){ alert('该分类下还有餐厅，不能删除'); return; }
+  await deleteDoc(doc(db,'statuses',id));
 };
 
-// 修复点：这里不仅更新 selectedColor，还要重新渲染颜色选项
-window._sc = i => { 
-  selectedColor=COLORS[i]; 
-  renderColorOpts(); 
-};
+window._sc = i => { selectedColor=COLORS[i]; renderColorOpts(); };
 
 function renderStatusListUI() {
   document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`
     <div class="status-item-ui">
-      <span>${s.label}</span> 
-      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button>
+      <span style="display:flex;align-items:center;gap:8px">
+        <span style="width:10px;height:10px;border-radius:50%;background:${s.color.dot};display:inline-block"></span>
+        ${s.label}
+      </span>
+      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x" style="font-size:13px"></i></button>
     </div>`).join('');
 }
 
 function renderColorOpts() {
   document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`
-    <div class="color-opt ${c===selectedColor?'sel':''}" 
-         style="background:${c.dot}" 
-         onclick="window._sc(${i})">
-    </div>`).join('');
+    <div class="color-opt ${c===selectedColor?'sel':''}" style="background:${c.dot}" onclick="window._sc(${i})"></div>`).join('');
 }
 
 function refreshStatusSelect(selId) {
-  document.getElementById('f-status').innerHTML = statuses.map(s=>`<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
+  document.getElementById('f-status').innerHTML = statuses.map(s=>
+    `<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
 }
 
-window.openAddModal = () => { editingId=null; refreshStatusSelect(); openModal('add-modal'); };
+// ── Helpers ──────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 window.bgClose = (e,id) => { if(e.target.id===id) closeModal(id); };
-function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
-window.togglePw = () => { const i=document.getElementById('login-pw'); i.type=i.type==='password'?'text':'password'; };
-window.doLogin = async () => { try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', document.getElementById('login-pw').value); } catch(e) { alert('密码错误'); } };
-const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'], AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
+function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+
+// Make buildWaUrl accessible (needed inside template string above)
+window.buildWaUrl = buildWaUrl;
 </script>
 </body>
 </html>
