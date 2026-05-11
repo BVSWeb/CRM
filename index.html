@@ -13,6 +13,7 @@
     --text: #1a1a18; --text2: #6b6a65; --text3: #9b9a95;
     --radius: 10px; --radius-lg: 14px;
     --accent: #378ADD; --accent-bg: rgba(55,138,221,0.12);
+    --whatsapp: #25D366;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -21,155 +22,121 @@
       --text: #f0efe8; --text2: #a0a09a; --text3: #6b6a65;
     }
   }
-  body { font-family: -apple-system,'PingFang SC','Hiragino Sans GB',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-
-  /* ── Login ── */
-  #login-page { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem; }
-  .login-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:2.5rem 2rem; width:100%; max-width:360px; }
-  .login-logo { width:44px; height:44px; background:var(--text); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem; color:var(--bg); font-size:20px; }
-  .login-card h2 { font-size:20px; font-weight:500; margin-bottom:4px; }
-  .login-card > p { font-size:13px; color:var(--text2); margin-bottom:1.75rem; }
-  .email-display { background:var(--surface2); border:0.5px solid var(--border); border-radius:var(--radius); padding:9px 12px; font-size:13px; color:var(--text2); margin-bottom:1rem; display:flex; align-items:center; gap:8px; }
-  .email-display i { font-size:15px; color:var(--text3); }
-  .pw-wrap { position:relative; margin-bottom:0.6rem; }
-  .pw-wrap input { width:100%; padding:9px 38px 9px 12px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
-  .pw-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
-  .pw-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text3); font-size:16px; padding:2px; }
-  .login-err { font-size:12px; color:#A32D2D; margin-bottom:0.75rem; min-height:18px; }
-  .btn-login { width:100%; padding:10px; font-size:14px; font-weight:500; background:var(--text); color:var(--bg); border:none; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity 0.15s; }
-  .btn-login:hover { opacity:0.85; }
-  .btn-login:disabled { opacity:0.5; cursor:not-allowed; }
-
-  /* ── App ── */
-  #app-page { display:none; }
-  .app { max-width:860px; margin:0 auto; padding:2rem 1.25rem; }
-  .header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.75rem; gap:12px; flex-wrap:wrap; }
-  .header h1 { font-size:22px; font-weight:500; }
-  .header-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-  .user-pill { font-size:12px; color:var(--text2); background:var(--surface2); border:0.5px solid var(--border); border-radius:20px; padding:5px 10px; display:flex; align-items:center; gap:5px; }
-
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-bottom:1.5rem; }
+  body { font-family: -apple-system, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .app { max-width:900px; margin:0 auto; padding:2rem 1.25rem; }
+  
+  /* Header & Stats */
+  .header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.5rem; gap:12px; flex-wrap:wrap; }
+  .header-actions { display:flex; gap:8px; align-items:center; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:1.5rem; }
   .stat { background:var(--surface2); border-radius:var(--radius); padding:0.85rem 1rem; }
-  .stat-label { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:5px; margin-bottom:4px; }
-  .stat-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .stat-label { font-size:12px; color:var(--text2); margin-bottom:4px; display:flex; align-items:center; gap:5px; }
+  .stat-dot { width:8px; height:8px; border-radius:50%; }
   .stat-value { font-size:22px; font-weight:500; }
 
-  .controls { display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap; align-items:center; }
-  .search-wrap { position:relative; flex:1; min-width:180px; }
-  .search-wrap i { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--text3); pointer-events:none; }
-  .search-wrap input { width:100%; padding:8px 12px 8px 34px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; }
-  .search-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
-
+  /* Controls */
+  .controls { display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap; }
+  .search-wrap { position:relative; flex:1; min-width:200px; }
+  .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text3); }
+  .search-wrap input { width:100%; padding:10px 10px 10px 38px; border-radius:var(--radius); border:0.5px solid var(--border2); background:var(--surface); color:var(--text); outline:none; }
   .filter-tabs { display:flex; gap:6px; flex-wrap:wrap; }
-  .ftab { font-size:12px; padding:6px 12px; border-radius:var(--radius); border:0.5px solid var(--border2); background:transparent; color:var(--text2); cursor:pointer; transition:all 0.15s; font-family:inherit; }
-  .ftab.active { background:var(--text); color:var(--bg); border-color:var(--text); }
-  .ftab:hover:not(.active) { background:var(--surface2); }
+  .ftab { font-size:12px; padding:8px 14px; border-radius:var(--radius); border:0.5px solid var(--border2); cursor:pointer; background:transparent; color:var(--text2); }
+  .ftab.active { background:var(--text); color:var(--bg); }
 
-  .user-list { display:flex; flex-direction:column; gap:8px; }
-  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; position: relative; }
-  .user-card:hover { border-color:var(--accent); background: var(--bg); }
-  .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:500; font-size:14px; flex-shrink:0; }
+  /* User Cards */
+  .user-list { display:flex; flex-direction:column; gap:10px; }
+  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem; display:flex; align-items:center; gap:16px; transition:0.2s; }
+  .user-card:hover { border-color:var(--accent); }
+  .avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:600; flex-shrink:0; }
   .user-info { flex:1; min-width:0; }
-  .user-name { font-size:14px; font-weight:500; display: flex; align-items: center; gap: 6px; }
-  .ti-external-link { font-size: 14px; color: var(--accent); opacity: 0.6; }
-  .user-meta { font-size:12px; color:var(--text2); margin-top:4px; display:flex; gap:14px; flex-wrap:wrap; }
+  .user-name { font-size:15px; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .user-name:hover { color: var(--accent); }
+  .user-meta { font-size:12px; color:var(--text2); display:flex; gap:12px; flex-wrap:wrap; }
   .user-meta span { display:flex; align-items:center; gap:4px; }
-  .badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:500; white-space:nowrap; flex-shrink:0; }
-  .actions { display:flex; gap:6px; flex-shrink:0; }
-  .icon-btn { width:30px; height:30px; border-radius:var(--radius); border:0.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); font-size:15px; transition:all 0.15s; }
+  
+  /* Action Buttons */
+  .actions { display:flex; gap:8px; align-items:center; }
+  .btn-wa { background: var(--whatsapp); color: white !important; border: none; font-weight: 500; padding: 7px 12px; }
+  .btn-wa:hover { opacity: 0.9; }
+  .icon-btn { width:34px; height:34px; border-radius:var(--radius); border:0.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); transition:0.2s; }
   .icon-btn:hover { background:var(--surface2); color:var(--text); }
-  .icon-btn.danger:hover { color:#A32D2D; border-color: #A32D2D; }
+  .icon-btn.danger:hover { color:#A32D2D; border-color:#A32D2D; }
 
-  .pagination { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 2rem; padding: 1rem; border-top: 0.5px solid var(--border); }
-  .page-info { font-size: 13px; color: var(--text2); }
-
-  .empty { text-align:center; padding:4rem 1rem; color:var(--text2); font-size:14px; background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); }
-  .btn { padding:7px 14px; font-size:13px; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s; border:0.5px solid var(--border2); background:var(--surface); color:var(--text2); }
-  .btn:hover:not(:disabled) { background:var(--surface2); }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
-
+  /* Modals & UI */
   .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:200; padding:1rem; }
   .overlay.open { display:flex; }
-  .modal { background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); width:100%; max-width:440px; padding:1.5rem; }
+  .modal { background:var(--surface); border-radius:var(--radius-lg); width:100%; max-width:440px; padding:1.5rem; }
   .form-group { margin-bottom:1rem; }
   .form-group label { font-size:12px; color:var(--text2); display:block; margin-bottom:5px; }
-  .form-group input, .form-group select { width:100%; padding:8px 10px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
-  .modal-footer { display:flex; justify-content:flex-end; gap:8px; margin-top:1.25rem; }
-
-  .status-list-ui { display:flex; flex-direction:column; gap:6px; margin-bottom:1rem; max-height:220px; overflow-y:auto; }
-  .status-item-ui { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:var(--radius); border:0.5px solid var(--border); }
-  
-  .add-status-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .add-status-row input { flex: 1; padding: 8px; border-radius: var(--radius); border: 0.5px solid var(--border2); outline: none; font-size: 13px; }
-  .color-opts { display:flex; gap:6px; }
-  .color-opt { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition: all 0.2s; }
-  .color-opt.sel { border-color: var(--text); transform: scale(1.15); }
-
-  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:9px 18px; border-radius:var(--radius); font-size:13px; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .form-group input, .form-group select { width:100%; padding:10px; border-radius:var(--radius); border:0.5px solid var(--border2); background:var(--surface); color:var(--text); outline:none; }
+  .pagination { display:flex; justify-content:center; align-items:center; gap:20px; margin-top:2rem; }
+  .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:10px 20px; border-radius:var(--radius); font-size:13px; opacity:0; transition:0.3s; z-index:999; }
   .toast.show { opacity:1; }
+  .badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600; }
+  
+  /* Color Options */
+  .color-opts { display:flex; gap:8px; margin-top:5px; }
+  .color-opt { width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent; }
+  .color-opt.sel { border-color: var(--text); }
 </style>
 </head>
 <body>
 
 <div id="login-page">
-  <div class="login-card">
-    <div class="login-logo"><i class="ti ti-users"></i></div>
-    <h2>用户管理系统</h2>
-    <p>请输入密码以继续</p>
-    <div class="email-display"><i class="ti ti-mail"></i> <span id="show-email">admin@bvsweb.com</span></div>
-    <div class="pw-wrap">
-      <input type="password" id="login-pw" placeholder="密码">
-      <button class="pw-toggle" onclick="togglePw()"><i class="ti ti-eye" id="pw-eye"></i></button>
+  <div class="login-card" style="margin: auto;">
+    <div class="login-logo"><i class="ti ti-lock"></i></div>
+    <h2>管理登录</h2>
+    <div class="pw-wrap" style="margin-top: 20px;">
+      <input type="password" id="login-pw" placeholder="输入密码" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div class="login-err" id="login-err"></div>
-    <button class="btn-login" id="login-btn" onclick="doLogin()"><i class="ti ti-login"></i> 登录</button>
+    <button class="btn-login" id="login-btn" onclick="doLogin()" style="margin-top: 10px;">登录</button>
   </div>
 </div>
 
-<div id="app-page">
+<div id="app-page" style="display:none;">
   <div class="app">
     <div class="header">
       <div>
-        <h1>用户管理</h1>
-        <p id="total-label">正在加载…</p>
+        <h1 id="total-label">用户管理</h1>
+        <p style="font-size:13px; color:var(--text2)">点击店名跳转 Google Maps | 点击 WhatsApp 发送消息</p>
       </div>
       <div class="header-actions">
-        <div class="user-pill"><i class="ti ti-user"></i><span id="authed-email"></span></div>
-        <button class="btn" onclick="doLogout()"><i class="ti ti-logout"></i>退出</button>
-        <button class="btn" onclick="openStatusModal()"><i class="ti ti-tag"></i>分类管理</button>
-        <button class="btn btn-primary" onclick="openAddModal()"><i class="ti ti-plus"></i>添加用户</button>
+        <button class="btn" onclick="openStatusModal()"><i class="ti ti-tags"></i>分类</button>
+        <button class="btn btn-primary" onclick="openAddModal()"><i class="ti ti-plus"></i>添加</button>
+        <button class="btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
       </div>
     </div>
+
     <div class="stats" id="stats-row"></div>
+
     <div class="controls">
       <div class="search-wrap">
         <i class="ti ti-search"></i>
-        <input type="text" id="search-input" placeholder="搜索店名、地址、电话..." oninput="resetPageAndRender()">
+        <input type="text" id="search-input" placeholder="搜索店名、电话..." oninput="resetPageAndRender()">
       </div>
       <div class="filter-tabs" id="filter-tabs"></div>
     </div>
+
     <div class="user-list" id="user-list"></div>
 
     <div class="pagination" id="pagination-ctrl">
-      <button class="btn" id="prev-page" onclick="changePage(-1)"><i class="ti ti-chevron-left"></i> 上一页</button>
+      <button class="btn" id="prev-page" onclick="changePage(-1)"><i class="ti ti-chevron-left"></i></button>
       <span class="page-info" id="page-info">第 1 页</span>
-      <button class="btn" id="next-page" onclick="changePage(1)">下一页 <i class="ti ti-chevron-right"></i></button>
+      <button class="btn" id="next-page" onclick="changePage(1)"><i class="ti ti-chevron-right"></i></button>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="add-modal" onclick="bgClose(event,'add-modal')">
   <div class="modal">
-    <h3 id="modal-title">添加用户</h3>
+    <h3 id="modal-title">用户信息</h3>
     <div class="form-group"><label>店名 *</label><input id="f-name" type="text"></div>
     <div class="form-group"><label>地址</label><input id="f-addr" type="text"></div>
-    <div class="form-group"><label>电话</label><input id="f-phone" type="text"></div>
-    <div class="form-group"><label>微信</label><input id="f-wechat" type="text"></div>
+    <div class="form-group"><label>电话 (WhatsApp 需填)</label><input id="f-phone" type="text" placeholder="例如: +393331234567"></div>
     <div class="form-group"><label>分类</label><select id="f-status"></select></div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('add-modal')">取消</button>
-      <button class="btn btn-primary" onclick="saveUser()"><span id="save-btn-text">保存</span></button>
+      <button class="btn btn-primary" onclick="saveUser()">保存</button>
     </div>
   </div>
 </div>
@@ -177,13 +144,13 @@
 <div class="overlay" id="status-modal" onclick="bgClose(event,'status-modal')">
   <div class="modal">
     <h3>分类管理</h3>
-    <div class="status-list-ui" id="status-list-ui"></div>
+    <div id="status-list-ui" style="margin-bottom:15px"></div>
     <div class="add-status-row">
-      <input type="text" id="new-status-name" placeholder="新分类名称">
+      <input id="new-status-name" type="text" placeholder="名称">
       <div class="color-opts" id="color-opts"></div>
       <button class="btn btn-primary" onclick="addStatus()">添加</button>
     </div>
-    <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('status-modal')">关闭</button></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('status-modal')">关闭</button></div>
   </div>
 </div>
 
@@ -217,45 +184,50 @@ const COLORS = [
   { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' }, // 蓝
   { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' }, // 绿
   { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' }, // 橙
-  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' }  // 紫
+  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' } 
 ];
 let selectedColor = COLORS[0];
 
+// ── Auth ──
+window.doLogin = async () => {
+  const pw = document.getElementById('login-pw').value;
+  try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', pw); } 
+  catch(e) { alert('密码错误'); }
+};
+window.doLogout = () => signOut(auth);
+window.togglePw = () => {
+  const i = document.getElementById('login-pw');
+  i.type = i.type === 'password' ? 'text' : 'password';
+};
+
 onAuthStateChanged(auth, user => {
-  if (user) {
-    document.getElementById('login-page').style.display='none';
-    document.getElementById('app-page').style.display='block';
+  document.getElementById('login-page').style.display = user ? 'none' : 'flex';
+  document.getElementById('app-page').style.display = user ? 'block' : 'none';
+  if(user) {
     document.getElementById('authed-email').textContent = user.email;
     initApp();
-  } else {
-    document.getElementById('login-page').style.display='flex';
-    document.getElementById('app-page').style.display='none';
   }
 });
 
 async function initApp() {
   const sSnap = await getDocs(collection(db, 'statuses'));
-  const currentLabels = sSnap.docs.map(d => d.data().label);
-  if (!currentLabels.includes('拒绝')) {
+  if (sSnap.empty) {
     await addDoc(collection(db, 'statuses'), { label: '拒绝', color: COLORS[0], order: 99 });
   }
-
   onSnapshot(collection(db, 'statuses'), snap => {
-    statuses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    statuses.sort((a,b) => (a.order||0)-(b.order||0));
+    statuses = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(a.order||0)-(b.order||0));
     renderAll();
   });
-
   onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc')), snap => {
     users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAll();
   });
 }
 
+// ── Render ──
 function renderAll() {
-  document.getElementById('total-label').textContent = `共 ${users.length} 条记录`;
-  const statHTML = [{label:'全部', val:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, val:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
-  document.getElementById('stats-row').innerHTML = statHTML.map(s=>`<div class="stat"><div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
+  const statsHTML = [{label:'全部', val:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, val:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
+  document.getElementById('stats-row').innerHTML = statsHTML.map(s=>`<div class="stat"><div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
   
   const tabs = [{id:'all', label:'全部'}, ...statuses.map(s=>({id:s.id, label:s.label}))];
   document.getElementById('filter-tabs').innerHTML = tabs.map(t=>`<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf('${t.id}')">${t.label}</button>`).join('');
@@ -265,9 +237,9 @@ function renderAll() {
 window.renderList = () => {
   const q = document.getElementById('search-input').value.toLowerCase();
   const filtered = users.filter(u => {
-    const mSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
-    const mFilter = activeFilter === 'all' || u.statusId === activeFilter;
-    return mSearch && mFilter;
+    const matchSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
+    const matchFilter = activeFilter === 'all' || u.statusId === activeFilter;
+    return matchSearch && matchFilter;
   });
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
@@ -278,110 +250,83 @@ window.renderList = () => {
   document.getElementById('next-page').disabled = currentPage >= totalPages;
 
   const listEl = document.getElementById('user-list');
-  if(!paged.length) { listEl.innerHTML='<div class="empty">无匹配结果</div>'; return; }
+  if(!paged.length) { listEl.innerHTML='<div class="empty">无数据</div>'; return; }
 
   listEl.innerHTML = paged.map((u, i) => {
-    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color: {bg:'#eee', tx:'#666', dot:'#888'}};
-    const mapUrl = u.placeId 
-      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
+    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color:{bg:'#eee', tx:'#666'}};
+    const mapUrl = u.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
+    
+    // WhatsApp URL 构造
+    const cleanPhone = (u.phone || '').replace(/\D/g, '');
+    const waText = encodeURIComponent(`CIAO ${u.name}, `);
+    const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${waText}`;
 
     return `
-    <div class="user-card" onclick="if(!event.target.closest('button')) window.open('${mapUrl}','_blank')">
+    <div class="user-card">
       <div class="avatar" style="background:${AVATAR_BG[i%6]};color:${AVATAR_TX[i%6]}">${(u.name||'?').slice(0,2)}</div>
       <div class="user-info">
-        <div class="user-name">${u.name} <i class="ti ti-external-link"></i></div>
+        <div class="user-name" onclick="window.open('${mapUrl}','_blank')">${u.name} <i class="ti ti-map-2"></i></div>
         <div class="user-meta">
           <span><i class="ti ti-map-pin"></i>${u.addr || '无地址'}</span>
-          ${u.phone?`<span><i class="ti ti-phone"></i>${u.phone}</span>`:''}
+          <span><i class="ti ti-phone"></i>${u.phone || '无'}</span>
         </div>
       </div>
-      <span class="badge" style="background:${s.color.bg};color:${s.color.tx}">${s.label}</span>
       <div class="actions">
-        <button class="icon-btn" onclick="event.stopPropagation(); window._eu('${u.id}')"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn danger" onclick="event.stopPropagation(); window._du('${u.id}')"><i class="ti ti-trash"></i></button>
+        <span class="badge" style="background:${s.color.bg};color:${s.color.tx};margin-right:8px">${s.label}</span>
+        ${u.phone ? `<button class="btn btn-wa" onclick="window.open('${waUrl}','_blank')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>` : ''}
+        <button class="icon-btn" onclick="window._eu('${u.id}')"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn danger" onclick="window._du('${u.id}')"><i class="ti ti-trash"></i></button>
       </div>
     </div>`;
   }).join('');
 };
 
+// ── Helpers ──
 window.resetPageAndRender = () => { currentPage = 1; renderList(); };
 window.changePage = d => { currentPage += d; renderList(); window.scrollTo(0,0); };
 window._sf = id => { activeFilter=id; currentPage=1; renderAll(); };
-
 window._eu = id => {
   const u = users.find(x=>x.id===id); editingId=id;
-  document.getElementById('modal-title').textContent='编辑用户';
   document.getElementById('f-name').value=u.name||'';
   document.getElementById('f-addr').value=u.addr||'';
   document.getElementById('f-phone').value=u.phone||'';
-  document.getElementById('f-wechat').value=u.wechat||'';
   refreshStatusSelect(u.statusId); openModal('add-modal');
 };
-
 window._du = async id => { if(confirm('确认删除？')) await deleteDoc(doc(db,'users',id)); };
-
 window.saveUser = async () => {
   const data = {
     name: document.getElementById('f-name').value,
     addr: document.getElementById('f-addr').value,
     phone: document.getElementById('f-phone').value,
-    wechat: document.getElementById('f-wechat').value,
     statusId: document.getElementById('f-status').value
   };
   if(editingId) await updateDoc(doc(db,'users',editingId), data);
   else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'), data); }
   closeModal('add-modal'); toast('已保存');
 };
-
 window.openStatusModal = () => { renderStatusListUI(); renderColorOpts(); openModal('status-modal'); };
-
 window.addStatus = async () => {
-  const input = document.getElementById('new-status-name');
-  const label = input.value.trim();
-  if(!label) return;
-  await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
-  input.value='';
+  const label = document.getElementById('new-status-name').value;
+  if(label) await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
+  document.getElementById('new-status-name').value='';
 };
-
-window._ds = async id => { 
-  if(users.some(u=>u.statusId===id)) { alert('该分类下有用户'); return; }
-  await deleteDoc(doc(db,'statuses',id)); 
-};
-
-// 修复点：这里不仅更新 selectedColor，还要重新渲染颜色选项
-window._sc = i => { 
-  selectedColor=COLORS[i]; 
-  renderColorOpts(); 
-};
+window._ds = id => { if(!users.some(u=>u.statusId===id)) deleteDoc(doc(db,'statuses',id)); else alert('该分类有用户'); };
+window._sc = i => { selectedColor=COLORS[i]; renderColorOpts(); };
 
 function renderStatusListUI() {
-  document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`
-    <div class="status-item-ui">
-      <span>${s.label}</span> 
-      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button>
-    </div>`).join('');
+  document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`<div class="status-item-ui"><span>${s.label}</span> <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button></div>`).join('');
 }
-
 function renderColorOpts() {
-  document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`
-    <div class="color-opt ${c===selectedColor?'sel':''}" 
-         style="background:${c.dot}" 
-         onclick="window._sc(${i})">
-    </div>`).join('');
+  document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`<div class="color-opt ${c===selectedColor?'sel':''}" style="background:${c.dot}" onclick="window._sc(${i})"></div>`).join('');
 }
-
 function refreshStatusSelect(selId) {
   document.getElementById('f-status').innerHTML = statuses.map(s=>`<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
 }
-
 window.openAddModal = () => { editingId=null; refreshStatusSelect(); openModal('add-modal'); };
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 window.bgClose = (e,id) => { if(e.target.id===id) closeModal(id); };
 function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
-window.togglePw = () => { const i=document.getElementById('login-pw'); i.type=i.type==='password'?'text':'password'; };
-window.doLogin = async () => { try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', document.getElementById('login-pw').value); } catch(e) { alert('密码错误'); } };
 const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'], AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
 </script>
 </body>
