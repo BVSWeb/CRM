@@ -12,140 +12,178 @@
     --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.18);
     --text: #1a1a18; --text2: #6b6a65; --text3: #9b9a95;
     --radius: 10px; --radius-lg: 14px;
-    --accent: #378ADD; --whatsapp: #25D366; --whatsapp-dark: #128C7E;
+    --accent: #378ADD; --accent-bg: rgba(55,138,221,0.12);
   }
-  body { font-family: -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height: 1.5; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --surface: #242422; --surface2: #2c2c2a;
+      --border: rgba(255,255,255,0.10); --border2: rgba(255,255,255,0.18);
+      --text: #f0efe8; --text2: #a0a09a; --text3: #6b6a65;
+    }
+  }
+  body { font-family: -apple-system,'PingFang SC','Hiragino Sans GB',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-  /* ── 登录页面 ── */
-  #login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .login-card { background: var(--surface); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border); width: 100%; max-width: 380px; text-align: center; }
+  /* ── Login ── */
+  #login-page { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem; }
+  .login-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:2.5rem 2rem; width:100%; max-width:360px; }
+  .login-logo { width:44px; height:44px; background:var(--text); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem; color:var(--bg); font-size:20px; }
+  .login-card h2 { font-size:20px; font-weight:500; margin-bottom:4px; }
+  .login-card > p { font-size:13px; color:var(--text2); margin-bottom:1.75rem; }
+  .email-display { background:var(--surface2); border:0.5px solid var(--border); border-radius:var(--radius); padding:9px 12px; font-size:13px; color:var(--text2); margin-bottom:1rem; display:flex; align-items:center; gap:8px; }
+  .email-display i { font-size:15px; color:var(--text3); }
+  .pw-wrap { position:relative; margin-bottom:0.6rem; }
+  .pw-wrap input { width:100%; padding:9px 38px 9px 12px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
+  .pw-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
+  .pw-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text3); font-size:16px; padding:2px; }
+  .login-err { font-size:12px; color:#A32D2D; margin-bottom:0.75rem; min-height:18px; }
+  .btn-login { width:100%; padding:10px; font-size:14px; font-weight:500; background:var(--text); color:var(--bg); border:none; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity 0.15s; }
+  .btn-login:hover { opacity:0.85; }
+  .btn-login:disabled { opacity:0.5; cursor:not-allowed; }
 
-  /* ── 主页面布局 ── */
-  #app-page { display: none; padding: 20px; }
-  .app-container { max-width: 1000px; margin: 0 auto; }
-  
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
-  .header h1 { font-size: 24px; font-weight: 600; }
+  /* ── App ── */
+  #app-page { display:none; }
+  .app { max-width:860px; margin:0 auto; padding:2rem 1.25rem; }
+  .header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.75rem; gap:12px; flex-wrap:wrap; }
+  .header h1 { font-size:22px; font-weight:500; }
+  .header-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .user-pill { font-size:12px; color:var(--text2); background:var(--surface2); border:0.5px solid var(--border); border-radius:20px; padding:5px 10px; display:flex; align-items:center; gap:5px; }
 
-  /* 统计卡片 */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 25px; }
-  .stat-card { background: var(--surface); padding: 15px; border-radius: var(--radius); border: 1px solid var(--border); }
-  .stat-label { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
-  .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .stat-count { font-size: 24px; font-weight: 700; margin-top: 5px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-bottom:1.5rem; }
+  .stat { background:var(--surface2); border-radius:var(--radius); padding:0.85rem 1rem; }
+  .stat-label { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+  .stat-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .stat-value { font-size:22px; font-weight:500; }
 
-  /* 控制栏 */
-  .controls { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-  .search-box { position: relative; width: 100%; }
-  .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); }
-  .search-box input { width: 100%; padding: 12px 12px 12px 40px; border-radius: var(--radius); border: 1px solid var(--border2); outline: none; font-size: 14px; }
-  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-  .tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; cursor: pointer; font-size: 13px; color: var(--text2); }
-  .tab-btn.active { background: var(--text); color: white; border-color: var(--text); }
+  .controls { display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap; align-items:center; }
+  .search-wrap { position:relative; flex:1; min-width:180px; }
+  .search-wrap i { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--text3); pointer-events:none; }
+  .search-wrap input { width:100%; padding:8px 12px 8px 34px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; }
+  .search-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
 
-  /* 用户卡片列表 */
-  .user-list { display: flex; flex-direction: column; gap: 12px; }
-  .user-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; display: flex; align-items: center; gap: 16px; transition: 0.2s; }
-  .user-card:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  
-  .user-info { flex: 1; min-width: 0; }
-  .user-name { font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text); }
-  .user-name:hover { color: var(--accent); }
-  .user-meta { font-size: 12px; color: var(--text2); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 12px; }
-  
-  .card-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  
-  /* 按钮样式 */
-  .btn { padding: 8px 14px; border-radius: var(--radius); cursor: pointer; font-size: 13px; font-weight: 500; border: 1px solid var(--border2); display: inline-flex; align-items: center; gap: 6px; background: white; transition: 0.2s; }
-  .btn-wa { background: var(--whatsapp); color: white; border: none; }
-  .btn-wa-alt { background: white; color: var(--whatsapp-dark); border: 1px solid var(--whatsapp); }
-  .btn-primary { background: var(--text); color: white; }
-  
-  /* 分页 */
-  .pagination { margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+  .filter-tabs { display:flex; gap:6px; flex-wrap:wrap; }
+  .ftab { font-size:12px; padding:6px 12px; border-radius:var(--radius); border:0.5px solid var(--border2); background:transparent; color:var(--text2); cursor:pointer; transition:all 0.15s; font-family:inherit; }
+  .ftab.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+  .ftab:hover:not(.active) { background:var(--surface2); }
 
-  /* 通用组件 */
-  .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-  .overlay.open { display: flex; }
-  .modal { background: white; padding: 25px; border-radius: var(--radius-lg); width: 100%; max-width: 450px; }
+  .user-list { display:flex; flex-direction:column; gap:8px; }
+  .user-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; display:flex; align-items:center; gap:14px; transition:border-color 0.15s; cursor: pointer; position: relative; }
+  .user-card:hover { border-color:var(--accent); background: var(--bg); }
+  .avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:500; font-size:14px; flex-shrink:0; }
+  .user-info { flex:1; min-width:0; }
+  .user-name { font-size:14px; font-weight:500; display: flex; align-items: center; gap: 6px; }
+  .ti-external-link { font-size: 14px; color: var(--accent); opacity: 0.6; }
+  .user-meta { font-size:12px; color:var(--text2); margin-top:4px; display:flex; gap:14px; flex-wrap:wrap; }
+  .user-meta span { display:flex; align-items:center; gap:4px; }
+  .badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:500; white-space:nowrap; flex-shrink:0; }
+  .actions { display:flex; gap:6px; flex-shrink:0; }
+  .icon-btn { width:30px; height:30px; border-radius:var(--radius); border:0.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); font-size:15px; transition:all 0.15s; }
+  .icon-btn:hover { background:var(--surface2); color:var(--text); }
+  .icon-btn.danger:hover { color:#A32D2D; border-color: #A32D2D; }
+
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 2rem; padding: 1rem; border-top: 0.5px solid var(--border); }
+  .page-info { font-size: 13px; color: var(--text2); }
+
+  .empty { text-align:center; padding:4rem 1rem; color:var(--text2); font-size:14px; background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); }
+  .btn { padding:7px 14px; font-size:13px; border-radius:var(--radius); cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s; border:0.5px solid var(--border2); background:var(--surface); color:var(--text2); }
+  .btn:hover:not(:disabled) { background:var(--surface2); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
+
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:200; padding:1rem; }
+  .overlay.open { display:flex; }
+  .modal { background:var(--surface); border-radius:var(--radius-lg); border:0.5px solid var(--border); width:100%; max-width:440px; padding:1.5rem; }
+  .form-group { margin-bottom:1rem; }
+  .form-group label { font-size:12px; color:var(--text2); display:block; margin-bottom:5px; }
+  .form-group input, .form-group select { width:100%; padding:8px 10px; font-size:14px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); outline:none; font-family:inherit; }
+  .modal-footer { display:flex; justify-content:flex-end; gap:8px; margin-top:1.25rem; }
+
+  .status-list-ui { display:flex; flex-direction:column; gap:6px; margin-bottom:1rem; max-height:220px; overflow-y:auto; }
+  .status-item-ui { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:var(--radius); border:0.5px solid var(--border); }
   
-  /* 颜色选择 */
-  .color-picker { display: flex; gap: 10px; margin-top: 10px; }
-  .color-circle { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-  .color-circle.selected { border-color: var(--text); transform: scale(1.2); }
+  .add-status-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .add-status-row input { flex: 1; padding: 8px; border-radius: var(--radius); border: 0.5px solid var(--border2); outline: none; font-size: 13px; }
+  .color-opts { display:flex; gap:6px; }
+  .color-opt { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition: all 0.2s; }
+  .color-opt.sel { border-color: var(--text); transform: scale(1.15); }
+
+  .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:9px 18px; border-radius:var(--radius); font-size:13px; z-index:999; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
 </style>
 </head>
 <body>
 
 <div id="login-page">
   <div class="login-card">
-    <h2 style="margin-bottom:20px">Sushi Manager</h2>
-    <input type="password" id="login-pw" placeholder="输入密码" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;">
-    <button class="btn btn-primary" onclick="doLogin()" style="width:100%; justify-content:center; padding:12px;">登录系统</button>
+    <div class="login-logo"><i class="ti ti-users"></i></div>
+    <h2>用户管理系统</h2>
+    <p>请输入密码以继续</p>
+    <div class="email-display"><i class="ti ti-mail"></i> <span id="show-email">admin@bvsweb.com</span></div>
+    <div class="pw-wrap">
+      <input type="password" id="login-pw" placeholder="密码">
+      <button class="pw-toggle" onclick="togglePw()"><i class="ti ti-eye" id="pw-eye"></i></button>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-login" id="login-btn" onclick="doLogin()"><i class="ti ti-login"></i> 登录</button>
   </div>
 </div>
 
 <div id="app-page">
-  <div class="app-container">
+  <div class="app">
     <div class="header">
       <div>
-        <h1>餐厅数据管理</h1>
-        <p id="authed-user" style="font-size:12px; color:var(--text2);"></p>
+        <h1>用户管理</h1>
+        <p id="total-label">正在加载…</p>
       </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn" onclick="openStatusModal()">分类管理</button>
-        <button class="btn btn-primary" onclick="openAddModal()">添加餐厅</button>
-        <button class="btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
+      <div class="header-actions">
+        <div class="user-pill"><i class="ti ti-user"></i><span id="authed-email"></span></div>
+        <button class="btn" onclick="doLogout()"><i class="ti ti-logout"></i>退出</button>
+        <button class="btn" onclick="openStatusModal()"><i class="ti ti-tag"></i>分类管理</button>
+        <button class="btn btn-primary" onclick="openAddModal()"><i class="ti ti-plus"></i>添加用户</button>
       </div>
     </div>
-
-    <div class="stats-grid" id="stats-row"></div>
-
+    <div class="stats" id="stats-row"></div>
     <div class="controls">
-      <div class="search-box">
+      <div class="search-wrap">
         <i class="ti ti-search"></i>
-        <input type="text" id="search-input" placeholder="搜索餐厅名字、地址、电话..." oninput="resetPage()">
+        <input type="text" id="search-input" placeholder="搜索店名、地址、电话..." oninput="resetPageAndRender()">
       </div>
-      <div class="tabs" id="filter-tabs"></div>
+      <div class="filter-tabs" id="filter-tabs"></div>
     </div>
-
     <div class="user-list" id="user-list"></div>
 
-    <div class="pagination">
-      <button class="btn" id="prev-btn" onclick="changePage(-1)">上一页</button>
-      <span id="page-info">第 1 页</span>
-      <button class="btn" id="next-btn" onclick="changePage(1)">下一页</button>
+    <div class="pagination" id="pagination-ctrl">
+      <button class="btn" id="prev-page" onclick="changePage(-1)"><i class="ti ti-chevron-left"></i> 上一页</button>
+      <span class="page-info" id="page-info">第 1 页</span>
+      <button class="btn" id="next-page" onclick="changePage(1)">下一页 <i class="ti ti-chevron-right"></i></button>
     </div>
   </div>
 </div>
 
-<div class="overlay" id="user-modal" onclick="if(event.target===this) closeModal('user-modal')">
+<div class="overlay" id="add-modal" onclick="bgClose(event,'add-modal')">
   <div class="modal">
-    <h3 id="modal-title">餐厅信息</h3>
-    <div style="margin-top:15px;">
-      <div class="form-group"><label>店名 *</label><input type="text" id="f-name" style="width:100%; padding:8px; margin-bottom:10px;"></div>
-      <div class="form-group"><label>地址</label><input type="text" id="f-addr" style="width:100%; padding:8px; margin-bottom:10px;"></div>
-      <div class="form-group"><label>电话</label><input type="text" id="f-phone" placeholder="+39..." style="width:100%; padding:8px; margin-bottom:10px;"></div>
-      <div class="form-group"><label>分类</label><select id="f-status" style="width:100%; padding:8px; margin-bottom:10px;"></select></div>
-    </div>
-    <div style="text-align:right; margin-top:20px;">
-      <button class="btn" onclick="closeModal('user-modal')">取消</button>
-      <button class="btn btn-primary" onclick="saveUser()">保存数据</button>
+    <h3 id="modal-title">添加用户</h3>
+    <div class="form-group"><label>店名 *</label><input id="f-name" type="text"></div>
+    <div class="form-group"><label>地址</label><input id="f-addr" type="text"></div>
+    <div class="form-group"><label>电话</label><input id="f-phone" type="text"></div>
+    <div class="form-group"><label>微信</label><input id="f-wechat" type="text"></div>
+    <div class="form-group"><label>分类</label><select id="f-status"></select></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('add-modal')">取消</button>
+      <button class="btn btn-primary" onclick="saveUser()"><span id="save-btn-text">保存</span></button>
     </div>
   </div>
 </div>
 
-<div class="overlay" id="status-modal" onclick="if(event.target===this) closeModal('status-modal')">
+<div class="overlay" id="status-modal" onclick="bgClose(event,'status-modal')">
   <div class="modal">
     <h3>分类管理</h3>
-    <div id="status-items-list" style="margin: 15px 0; max-height: 200px; overflow-y: auto;"></div>
-    <hr>
-    <div style="margin-top:15px;">
-      <input type="text" id="new-status-name" placeholder="新分类名称" style="width:100%; padding:8px; margin-bottom:10px;">
-      <div class="color-picker" id="color-picker-ui"></div>
-      <button class="btn btn-primary" onclick="addStatus()" style="width:100%; margin-top:15px; justify-content:center;">添加新分类</button>
+    <div class="status-list-ui" id="status-list-ui"></div>
+    <div class="add-status-row">
+      <input type="text" id="new-status-name" placeholder="新分类名称">
+      <div class="color-opts" id="color-opts"></div>
+      <button class="btn btn-primary" onclick="addStatus()">添加</button>
     </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('status-modal')">关闭</button></div>
   </div>
 </div>
 
@@ -170,72 +208,61 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let users = [], statuses = [];
-let activeFilter = 'all', currentPage = 1, editingId = null;
+let activeFilter = 'all', editingId = null;
+let currentPage = 1;
 const PAGE_SIZE = 100;
 
 const COLORS = [
-  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' }, // 红色 (建议用于拒绝)
-  { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' }, // 蓝色
-  { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' }, // 绿色
-  { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' }, // 橙色
-  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' }  // 紫色
+  { bg:'#FCEBEB', tx:'#791F1F', dot:'#E24B4A' }, // 红 (拒绝)
+  { bg:'#E6F1FB', tx:'#0C447C', dot:'#378ADD' }, // 蓝
+  { bg:'#E1F5EE', tx:'#085041', dot:'#1D9E75' }, // 绿
+  { bg:'#FAEEDA', tx:'#633806', dot:'#BA7517' }, // 橙
+  { bg:'#EEEDFE', tx:'#3C3489', dot:'#7F77DD' }  // 紫
 ];
-let selectedColor = COLORS[1];
-
-// ── 登录/退出 ──
-window.doLogin = async () => {
-  const pw = document.getElementById('login-pw').value;
-  try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', pw); } catch(e) { alert('密码错误'); }
-};
-window.doLogout = () => signOut(auth);
+let selectedColor = COLORS[0];
 
 onAuthStateChanged(auth, user => {
-  document.getElementById('login-page').style.display = user ? 'none' : 'flex';
-  document.getElementById('app-page').style.display = user ? 'block' : 'none';
-  if(user) {
-    document.getElementById('authed-user').textContent = `当前账号: ${user.email}`;
-    initData();
+  if (user) {
+    document.getElementById('login-page').style.display='none';
+    document.getElementById('app-page').style.display='block';
+    document.getElementById('authed-email').textContent = user.email;
+    initApp();
+  } else {
+    document.getElementById('login-page').style.display='flex';
+    document.getElementById('app-page').style.display='none';
   }
 });
 
-// ── 数据初始化 ──
-async function initData() {
-  // 确保有“拒绝”分类
+async function initApp() {
   const sSnap = await getDocs(collection(db, 'statuses'));
-  if (sSnap.empty) {
-    await addDoc(collection(db, 'statuses'), { label:'拒绝', color:COLORS[0], order:99 });
+  const currentLabels = sSnap.docs.map(d => d.data().label);
+  if (!currentLabels.includes('拒绝')) {
+    await addDoc(collection(db, 'statuses'), { label: '拒绝', color: COLORS[0], order: 99 });
   }
 
   onSnapshot(collection(db, 'statuses'), snap => {
-    statuses = snap.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b)=>a.order-b.order);
-    renderUI();
+    statuses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    statuses.sort((a,b) => (a.order||0)-(b.order||0));
+    renderAll();
   });
 
   onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc')), snap => {
-    users = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-    renderUI();
+    users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderAll();
   });
 }
 
-// ── 渲染核心 ──
-function renderUI() {
-  // 统计栏
-  const stats = [{label:'全部', count:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, count:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
-  document.getElementById('stats-row').innerHTML = stats.map(s => `
-    <div class="stat-card">
-      <div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div>
-      <div class="stat-count">${s.count}</div>
-    </div>`).join('');
-
-  // 标签栏
+function renderAll() {
+  document.getElementById('total-label').textContent = `共 ${users.length} 条记录`;
+  const statHTML = [{label:'全部', val:users.length, dot:'#888'}, ...statuses.map(s=>({label:s.label, val:users.filter(u=>u.statusId===s.id).length, dot:s.color.dot}))];
+  document.getElementById('stats-row').innerHTML = statHTML.map(s=>`<div class="stat"><div class="stat-label"><span class="stat-dot" style="background:${s.dot}"></span>${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
+  
   const tabs = [{id:'all', label:'全部'}, ...statuses.map(s=>({id:s.id, label:s.label}))];
-  document.getElementById('filter-tabs').innerHTML = tabs.map(t => `
-    <button class="tab-btn ${activeFilter===t.id?'active':''}" onclick="setFilter('${t.id}')">${t.label}</button>`).join('');
-
-  renderUserList();
+  document.getElementById('filter-tabs').innerHTML = tabs.map(t=>`<button class="ftab ${activeFilter===t.id?'active':''}" onclick="window._sf('${t.id}')">${t.label}</button>`).join('');
+  renderList();
 }
 
-function renderUserList() {
+window.renderList = () => {
   const q = document.getElementById('search-input').value.toLowerCase();
   const filtered = users.filter(u => {
     const mSearch = !q || [u.name, u.addr, u.phone].some(v => v?.toLowerCase().includes(q));
@@ -246,134 +273,115 @@ function renderUserList() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
   const paged = filtered.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
 
-  document.getElementById('page-info').textContent = `第 ${currentPage} / ${totalPages} 页 (共 ${filtered.length} 条)`;
-  document.getElementById('prev-btn').disabled = currentPage <= 1;
-  document.getElementById('next-btn').disabled = currentPage >= totalPages;
+  document.getElementById('page-info').textContent = `第 ${currentPage} / ${totalPages} 页`;
+  document.getElementById('prev-page').disabled = currentPage <= 1;
+  document.getElementById('next-page').disabled = currentPage >= totalPages;
 
   const listEl = document.getElementById('user-list');
-  if(!paged.length) { listEl.innerHTML = '<div class="empty">没有找到餐厅数据</div>'; return; }
+  if(!paged.length) { listEl.innerHTML='<div class="empty">无匹配结果</div>'; return; }
 
   listEl.innerHTML = paged.map((u, i) => {
-    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color:{bg:'#eee', tx:'#666'}};
-    
-    // Maps & WhatsApp Links
-    const mapUrl = u.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
-    const cleanPhone = (u.phone || '').replace(/\D/g, '');
-    
-    // WhatsApp 按钮 1: 招呼
-    const waMsg1 = encodeURIComponent(`CIAO ${u.name}, `);
-    // WhatsApp 按钮 2: 报价/附件模板
-    const waMsg2 = encodeURIComponent(`CIAO ${u.name}, ti invio il nostro listino prezzi e le offerte attuali.`);
+    const s = statuses.find(x=>x.id===u.statusId) || {label:'未分类', color: {bg:'#eee', tx:'#666', dot:'#888'}};
+    const mapUrl = u.placeId 
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name)}&query_place_id=${u.placeId}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.name + ' ' + (u.addr||''))}`;
 
     return `
-    <div class="user-card">
+    <div class="user-card" onclick="if(!event.target.closest('button')) window.open('${mapUrl}','_blank')">
+      <div class="avatar" style="background:${AVATAR_BG[i%6]};color:${AVATAR_TX[i%6]}">${(u.name||'?').slice(0,2)}</div>
       <div class="user-info">
-        <div class="user-name" onclick="window.open('${mapUrl}','_blank')">${u.name} <i class="ti ti-external-link"></i></div>
+        <div class="user-name">${u.name} <i class="ti ti-external-link"></i></div>
         <div class="user-meta">
           <span><i class="ti ti-map-pin"></i>${u.addr || '无地址'}</span>
-          <span><i class="ti ti-phone"></i>${u.phone || '无电话'}</span>
+          ${u.phone?`<span><i class="ti ti-phone"></i>${u.phone}</span>`:''}
         </div>
       </div>
-      <div class="card-actions">
-        <span class="badge" style="background:${s.color.bg}; color:${s.color.tx}">${s.label}</span>
-        ${u.phone ? `
-          <button class="btn btn-wa" onclick="window.open('https://wa.me/${cleanPhone}?text=${waMsg1}','_blank')"><i class="ti ti-brand-whatsapp"></i> 打招呼</button>
-          <button class="btn btn-wa-alt" onclick="window.open('https://wa.me/${cleanPhone}?text=${waMsg2}','_blank')"><i class="ti ti-file-text"></i> 发报价</button>
-        ` : ''}
-        <button class="icon-btn" onclick="editUser('${u.id}')"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn danger" onclick="deleteUser('${u.id}')"><i class="ti ti-trash"></i></button>
+      <span class="badge" style="background:${s.color.bg};color:${s.color.tx}">${s.label}</span>
+      <div class="actions">
+        <button class="icon-btn" onclick="event.stopPropagation(); window._eu('${u.id}')"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn danger" onclick="event.stopPropagation(); window._du('${u.id}')"><i class="ti ti-trash"></i></button>
       </div>
     </div>`;
   }).join('');
-}
-
-// ── 功能逻辑 ──
-window.setFilter = (id) => { activeFilter = id; currentPage = 1; renderUI(); };
-window.resetPage = () => { currentPage = 1; renderUserList(); };
-window.changePage = (d) => { currentPage += d; renderUserList(); window.scrollTo(0,0); };
-
-window.openAddModal = () => {
-  editingId = null;
-  document.getElementById('modal-title').textContent = '添加新餐厅';
-  ['f-name','f-addr','f-phone'].forEach(id => document.getElementById(id).value = '');
-  updateStatusSelect();
-  document.getElementById('user-modal').classList.add('open');
 };
 
-window.editUser = (id) => {
-  const u = users.find(x=>x.id===id);
-  editingId = id;
-  document.getElementById('modal-title').textContent = '编辑餐厅信息';
-  document.getElementById('f-name').value = u.name;
-  document.getElementById('f-addr').value = u.addr;
-  document.getElementById('f-phone').value = u.phone;
-  updateStatusSelect(u.statusId);
-  document.getElementById('user-modal').classList.add('open');
+window.resetPageAndRender = () => { currentPage = 1; renderList(); };
+window.changePage = d => { currentPage += d; renderList(); window.scrollTo(0,0); };
+window._sf = id => { activeFilter=id; currentPage=1; renderAll(); };
+
+window._eu = id => {
+  const u = users.find(x=>x.id===id); editingId=id;
+  document.getElementById('modal-title').textContent='编辑用户';
+  document.getElementById('f-name').value=u.name||'';
+  document.getElementById('f-addr').value=u.addr||'';
+  document.getElementById('f-phone').value=u.phone||'';
+  document.getElementById('f-wechat').value=u.wechat||'';
+  refreshStatusSelect(u.statusId); openModal('add-modal');
 };
+
+window._du = async id => { if(confirm('确认删除？')) await deleteDoc(doc(db,'users',id)); };
 
 window.saveUser = async () => {
   const data = {
     name: document.getElementById('f-name').value,
     addr: document.getElementById('f-addr').value,
     phone: document.getElementById('f-phone').value,
+    wechat: document.getElementById('f-wechat').value,
     statusId: document.getElementById('f-status').value
   };
-  if(!data.name) return alert('请填写店名');
-  
   if(editingId) await updateDoc(doc(db,'users',editingId), data);
-  else { data.createdAt = serverTimestamp(); await addDoc(collection(db,'users'), data); }
-  
-  closeModal('user-modal');
-  showToast('保存成功');
+  else { data.createdAt=serverTimestamp(); await addDoc(collection(db,'users'), data); }
+  closeModal('add-modal'); toast('已保存');
 };
 
-window.deleteUser = async (id) => {
-  if(confirm('确定要删除这家餐厅吗？')) await deleteDoc(doc(db,'users',id));
-};
-
-// ── 分类管理 ──
-window.openStatusModal = () => {
-  renderStatusItems();
-  renderColorPicker();
-  document.getElementById('status-modal').classList.add('open');
-};
+window.openStatusModal = () => { renderStatusListUI(); renderColorOpts(); openModal('status-modal'); };
 
 window.addStatus = async () => {
-  const name = document.getElementById('new-status-name').value;
-  if(!name) return;
-  await addDoc(collection(db,'statuses'), { label:name, color:selectedColor, order:statuses.length });
-  document.getElementById('new-status-name').value = '';
-  showToast('分类已添加');
+  const input = document.getElementById('new-status-name');
+  const label = input.value.trim();
+  if(!label) return;
+  await addDoc(collection(db,'statuses'), {label, color:selectedColor, order:statuses.length});
+  input.value='';
 };
 
-function renderStatusItems() {
-  document.getElementById('status-items-list').innerHTML = statuses.map(s => `
-    <div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee;">
-      <span><span style="color:${s.color.dot}">●</span> ${s.label}</span>
-      <button onclick="deleteStatus('${s.id}')" style="border:none; color:red; cursor:pointer; background:none;">删除</button>
+window._ds = async id => { 
+  if(users.some(u=>u.statusId===id)) { alert('该分类下有用户'); return; }
+  await deleteDoc(doc(db,'statuses',id)); 
+};
+
+// 修复点：这里不仅更新 selectedColor，还要重新渲染颜色选项
+window._sc = i => { 
+  selectedColor=COLORS[i]; 
+  renderColorOpts(); 
+};
+
+function renderStatusListUI() {
+  document.getElementById('status-list-ui').innerHTML = statuses.map(s=>`
+    <div class="status-item-ui">
+      <span>${s.label}</span> 
+      <button class="icon-btn danger" onclick="window._ds('${s.id}')"><i class="ti ti-x"></i></button>
     </div>`).join('');
 }
 
-window.deleteStatus = async (id) => {
-  if(users.some(u=>u.statusId===id)) return alert('该分类下还有餐厅，不能删除');
-  await deleteDoc(doc(db,'statuses',id));
-};
-
-function renderColorPicker() {
-  document.getElementById('color-picker-ui').innerHTML = COLORS.map((c, i) => `
-    <div class="color-circle ${c===selectedColor?'selected':''}" 
+function renderColorOpts() {
+  document.getElementById('color-opts').innerHTML = COLORS.map((c,i)=>`
+    <div class="color-opt ${c===selectedColor?'sel':''}" 
          style="background:${c.dot}" 
-         onclick="window.selectCol(${i})"></div>`).join('');
-}
-window.selectCol = (i) => { selectedColor = COLORS[i]; renderColorPicker(); };
-
-function updateStatusSelect(selId) {
-  document.getElementById('f-status').innerHTML = statuses.map(s => `
-    <option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
+         onclick="window._sc(${i})">
+    </div>`).join('');
 }
 
-window.closeModal = (id) => document.getElementById(id).classList.remove('open');
-function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+function refreshStatusSelect(selId) {
+  document.getElementById('f-status').innerHTML = statuses.map(s=>`<option value="${s.id}" ${s.id===selId?'selected':''}>${s.label}</option>`).join('');
+}
+
+window.openAddModal = () => { editingId=null; refreshStatusSelect(); openModal('add-modal'); };
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+window.closeModal = id => document.getElementById(id).classList.remove('open');
+window.bgClose = (e,id) => { if(e.target.id===id) closeModal(id); };
+function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+window.togglePw = () => { const i=document.getElementById('login-pw'); i.type=i.type==='password'?'text':'password'; };
+window.doLogin = async () => { try { await signInWithEmailAndPassword(auth, 'admin@bvsweb.com', document.getElementById('login-pw').value); } catch(e) { alert('密码错误'); } };
 const AVATAR_BG = ['#B5D4F4','#9FE1CB','#FAC775','#F4C0D1','#CECBF6','#C0DD97'], AVATAR_TX = ['#0C447C','#085041','#633806','#72243E','#3C3489','#27500A'];
 </script>
 </body>
